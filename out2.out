@@ -1,0 +1,350 @@
+(13292, 40, 40, 40)
+(13292,)
+RetNet(
+  (conv1): Sequential(
+    (0): Conv3d(1, 12, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1), bias=False, padding_mode=circular)
+    (1): BatchNorm3d(12, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.01)
+  )
+  (conv2): Sequential(
+    (0): Conv3d(12, 24, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1), bias=False, padding_mode=circular)
+    (1): BatchNorm3d(24, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.01)
+  )
+  (adjust_channels): Conv3d(12, 24, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False, padding_mode=circular)
+  (max1): MaxPool3d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv3): Sequential(
+    (0): Conv3d(24, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1), bias=False, padding_mode=circular)
+    (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.01)
+  )
+  (max2): MaxPool3d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (conv4): Sequential(
+    (0): Conv3d(32, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1), bias=False, padding_mode=circular)
+    (1): BatchNorm3d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.01)
+  )
+  (conv5): Sequential(
+    (0): Conv3d(64, 120, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1), bias=False, padding_mode=circular)
+    (1): BatchNorm3d(120, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.01)
+  )
+  (fc1): Sequential(
+    (0): Flatten(start_dim=1, end_dim=-1)
+    (1): Dropout(p=0.3, inplace=False)
+    (2): Linear(in_features=1, out_features=1176, bias=True)
+    (3): BatchNorm1d(1176, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (4): LeakyReLU(negative_slope=0.01)
+  )
+  (fc2): Sequential(
+    (0): Linear(in_features=1176, out_features=84, bias=True)
+    (1): BatchNorm1d(84, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.01)
+    (3): Linear(in_features=84, out_features=20, bias=True)
+    (4): BatchNorm1d(20, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): LeakyReLU(negative_slope=0.01)
+    (6): Linear(in_features=20, out_features=1, bias=True)
+  )
+)
+
+Epoch: 0
+Iteration 15         ->    train_metric = -0.064         val_metric = 0.048
+Iteration 30         ->    train_metric = 0.038          val_metric = 0.082
+Iteration 45         ->    train_metric = 0.046          val_metric = 0.076
+Iteration 60         ->    train_metric = 0.130          val_metric = 0.131
+Iteration 75         ->    train_metric = 0.094          val_metric = 0.090
+Iteration 90         ->    train_metric = 0.044          val_metric = 0.126
+Iteration 105        ->    train_metric = 0.142          val_metric = 0.129
+Iteration 120        ->    train_metric = -0.098         val_metric = 0.201
+Iteration 135        ->    train_metric = 0.190          val_metric = 0.240
+Iteration 150        ->    train_metric = 0.197          val_metric = 0.176
+Iteration 165        ->    train_metric = 0.125          val_metric = 0.219
+Iteration 180        ->    train_metric = 0.228          val_metric = 0.258
+Iteration 195        ->    train_metric = -0.015         val_metric = 0.148
+Iteration 210        ->    train_metric = 0.254          val_metric = 0.255
+Iteration 225        ->    train_metric = 0.317          val_metric = 0.327
+Iteration 240        ->    train_metric = 0.326          val_metric = 0.321
+Iteration 255        ->    train_metric = 0.313          val_metric = 0.301
+Iteration 270        ->    train_metric = 0.337          val_metric = 0.334
+Iteration 285        ->    train_metric = 0.295          val_metric = 0.298
+Iteration 300        ->    train_metric = 0.338          val_metric = 0.386
+Iteration 315        ->    train_metric = 0.303          val_metric = 0.346
+Iteration 330        ->    train_metric = 0.300          val_metric = 0.278
+Iteration 345        ->    train_metric = 0.434          val_metric = 0.444
+Iteration 360        ->    train_metric = 0.450          val_metric = 0.464
+Iteration 375        ->    train_metric = 0.424          val_metric = 0.442
+Iteration 390        ->    train_metric = 0.468          val_metric = 0.469
+Iteration 405        ->    train_metric = 0.225          val_metric = 0.528
+
+Epoch: 1
+Iteration 420        ->    train_metric = 0.471          val_metric = 0.471
+Iteration 435        ->    train_metric = 0.497          val_metric = 0.499
+Iteration 450        ->    train_metric = 0.556          val_metric = 0.563
+Iteration 465        ->    train_metric = 0.569          val_metric = 0.515
+Iteration 480        ->    train_metric = 0.609          val_metric = 0.574
+Iteration 495        ->    train_metric = 0.526          val_metric = 0.528
+Iteration 510        ->    train_metric = 0.448          val_metric = 0.460
+Iteration 525        ->    train_metric = 0.664          val_metric = 0.665
+Iteration 540        ->    train_metric = 0.549          val_metric = 0.567
+Iteration 555        ->    train_metric = 0.507          val_metric = 0.625
+Iteration 570        ->    train_metric = 0.709          val_metric = 0.701
+Iteration 585        ->    train_metric = 0.680          val_metric = 0.664
+Iteration 600        ->    train_metric = 0.724          val_metric = 0.701
+Iteration 615        ->    train_metric = 0.740          val_metric = 0.712
+Iteration 630        ->    train_metric = 0.679          val_metric = 0.689
+Iteration 645        ->    train_metric = 0.685          val_metric = 0.717
+Iteration 660        ->    train_metric = 0.669          val_metric = 0.727
+Iteration 675        ->    train_metric = 0.782          val_metric = 0.764
+Iteration 690        ->    train_metric = 0.671          val_metric = 0.706
+Iteration 705        ->    train_metric = 0.798          val_metric = 0.790
+Iteration 720        ->    train_metric = 0.784          val_metric = 0.781
+Iteration 735        ->    train_metric = 0.663          val_metric = 0.746
+Iteration 750        ->    train_metric = 0.782          val_metric = 0.836
+Iteration 765        ->    train_metric = 0.690          val_metric = 0.800
+Iteration 780        ->    train_metric = 0.820          val_metric = 0.854
+Iteration 795        ->    train_metric = 0.819          val_metric = 0.844
+Iteration 810        ->    train_metric = 0.774          val_metric = 0.802
+Iteration 825        ->    train_metric = 0.848          val_metric = 0.856
+
+Epoch: 2
+Iteration 840        ->    train_metric = 0.847          val_metric = 0.804
+Iteration 855        ->    train_metric = 0.778          val_metric = 0.821
+Iteration 870        ->    train_metric = 0.749          val_metric = 0.833
+Iteration 885        ->    train_metric = 0.851          val_metric = 0.823
+Iteration 900        ->    train_metric = 0.853          val_metric = 0.868
+Iteration 915        ->    train_metric = 0.685          val_metric = 0.781
+Iteration 930        ->    train_metric = 0.857          val_metric = 0.859
+Iteration 945        ->    train_metric = 0.901          val_metric = 0.892
+Iteration 960        ->    train_metric = 0.854          val_metric = 0.882
+Iteration 975        ->    train_metric = 0.821          val_metric = 0.851
+Iteration 990        ->    train_metric = 0.776          val_metric = 0.823
+Iteration 1005       ->    train_metric = 0.854          val_metric = 0.876
+Iteration 1020       ->    train_metric = 0.857          val_metric = 0.869
+Iteration 1035       ->    train_metric = 0.795          val_metric = 0.810
+Iteration 1050       ->    train_metric = 0.942          val_metric = 0.885
+Iteration 1065       ->    train_metric = 0.918          val_metric = 0.878
+Iteration 1080       ->    train_metric = 0.806          val_metric = 0.903
+Iteration 1095       ->    train_metric = 0.902          val_metric = 0.910
+Iteration 1110       ->    train_metric = 0.933          val_metric = 0.897
+Iteration 1125       ->    train_metric = 0.878          val_metric = 0.888
+Iteration 1140       ->    train_metric = 0.907          val_metric = 0.918
+Iteration 1155       ->    train_metric = 0.885          val_metric = 0.917
+Iteration 1170       ->    train_metric = 0.907          val_metric = 0.911
+Iteration 1185       ->    train_metric = 0.879          val_metric = 0.880
+Iteration 1200       ->    train_metric = 0.672          val_metric = 0.856
+Iteration 1215       ->    train_metric = 0.852          val_metric = 0.924
+Iteration 1230       ->    train_metric = 0.856          val_metric = 0.879
+Iteration 1245       ->    train_metric = 0.832          val_metric = 0.838
+
+Epoch: 3
+Iteration 1260       ->    train_metric = 0.888          val_metric = 0.880
+Iteration 1275       ->    train_metric = 0.876          val_metric = 0.898
+Iteration 1290       ->    train_metric = 0.890          val_metric = 0.900
+Iteration 1305       ->    train_metric = 0.799          val_metric = 0.852
+Iteration 1320       ->    train_metric = 0.934          val_metric = 0.910
+Iteration 1335       ->    train_metric = 0.788          val_metric = 0.830
+Iteration 1350       ->    train_metric = 0.754          val_metric = 0.853
+Iteration 1365       ->    train_metric = 0.898          val_metric = 0.909
+Iteration 1380       ->    train_metric = 0.869          val_metric = 0.904
+Iteration 1395       ->    train_metric = 0.848          val_metric = 0.893
+Iteration 1410       ->    train_metric = 0.925          val_metric = 0.905
+Iteration 1425       ->    train_metric = 0.899          val_metric = 0.907
+Iteration 1440       ->    train_metric = 0.908          val_metric = 0.906
+Iteration 1455       ->    train_metric = 0.848          val_metric = 0.916
+Iteration 1470       ->    train_metric = 0.946          val_metric = 0.911
+Iteration 1485       ->    train_metric = 0.761          val_metric = 0.886
+Iteration 1500       ->    train_metric = 0.808          val_metric = 0.806
+Iteration 1515       ->    train_metric = 0.937          val_metric = 0.919
+Iteration 1530       ->    train_metric = 0.894          val_metric = 0.924
+Iteration 1545       ->    train_metric = 0.822          val_metric = 0.893
+Iteration 1560       ->    train_metric = 0.865          val_metric = 0.903
+Iteration 1575       ->    train_metric = 0.848          val_metric = 0.903
+Iteration 1590       ->    train_metric = 0.924          val_metric = 0.914
+Iteration 1605       ->    train_metric = 0.698          val_metric = 0.886
+Iteration 1620       ->    train_metric = 0.931          val_metric = 0.908
+Iteration 1635       ->    train_metric = 0.861          val_metric = 0.917
+Iteration 1650       ->    train_metric = 0.913          val_metric = 0.916
+
+Epoch: 4
+Iteration 1665       ->    train_metric = 0.817          val_metric = 0.885
+Iteration 1680       ->    train_metric = 0.942          val_metric = 0.911
+Iteration 1695       ->    train_metric = 0.884          val_metric = 0.916
+Iteration 1710       ->    train_metric = 0.869          val_metric = 0.909
+Iteration 1725       ->    train_metric = 0.823          val_metric = 0.848
+Iteration 1740       ->    train_metric = 0.915          val_metric = 0.920
+Iteration 1755       ->    train_metric = 0.899          val_metric = 0.923
+Iteration 1770       ->    train_metric = 0.846          val_metric = 0.843
+Iteration 1785       ->    train_metric = 0.934          val_metric = 0.898
+Iteration 1800       ->    train_metric = 0.854          val_metric = 0.862
+Iteration 1815       ->    train_metric = 0.879          val_metric = 0.794
+Iteration 1830       ->    train_metric = 0.828          val_metric = 0.859
+Iteration 1845       ->    train_metric = 0.897          val_metric = 0.922
+Iteration 1860       ->    train_metric = 0.934          val_metric = 0.931
+Iteration 1875       ->    train_metric = 0.880          val_metric = 0.900
+Iteration 1890       ->    train_metric = 0.784          val_metric = 0.903
+Iteration 1905       ->    train_metric = 0.866          val_metric = 0.899
+Iteration 1920       ->    train_metric = 0.822          val_metric = 0.856
+Iteration 1935       ->    train_metric = 0.711          val_metric = 0.798
+Iteration 1950       ->    train_metric = 0.856          val_metric = 0.805
+Iteration 1965       ->    train_metric = 0.858          val_metric = 0.890
+Iteration 1980       ->    train_metric = 0.880          val_metric = 0.924
+Iteration 1995       ->    train_metric = 0.937          val_metric = 0.923
+Iteration 2010       ->    train_metric = 0.923          val_metric = 0.927
+Iteration 2025       ->    train_metric = 0.897          val_metric = 0.907
+Iteration 2040       ->    train_metric = 0.901          val_metric = 0.923
+Iteration 2055       ->    train_metric = 0.835          val_metric = 0.926
+Iteration 2070       ->    train_metric = 0.933          val_metric = 0.930
+
+Epoch: 5
+Iteration 2085       ->    train_metric = 0.937          val_metric = 0.904
+Iteration 2100       ->    train_metric = 0.885          val_metric = 0.914
+Iteration 2115       ->    train_metric = 0.870          val_metric = 0.916
+Iteration 2130       ->    train_metric = 0.752          val_metric = 0.892
+Iteration 2145       ->    train_metric = 0.904          val_metric = 0.901
+Iteration 2160       ->    train_metric = 0.839          val_metric = 0.897
+Iteration 2175       ->    train_metric = 0.943          val_metric = 0.914
+Iteration 2190       ->    train_metric = 0.666          val_metric = 0.922
+Iteration 2205       ->    train_metric = 0.884          val_metric = 0.911
+Iteration 2220       ->    train_metric = 0.835          val_metric = 0.931
+Iteration 2235       ->    train_metric = 0.899          val_metric = 0.908
+Iteration 2250       ->    train_metric = 0.957          val_metric = 0.922
+Iteration 2265       ->    train_metric = 0.892          val_metric = 0.901
+Iteration 2280       ->    train_metric = 0.797          val_metric = 0.906
+Iteration 2295       ->    train_metric = 0.856          val_metric = 0.923
+Iteration 2310       ->    train_metric = 0.837          val_metric = 0.923
+Iteration 2325       ->    train_metric = 0.834          val_metric = 0.905
+Iteration 2340       ->    train_metric = 0.935          val_metric = 0.936
+Iteration 2355       ->    train_metric = 0.926          val_metric = 0.909
+Iteration 2370       ->    train_metric = 0.860          val_metric = 0.926
+Iteration 2385       ->    train_metric = 0.796          val_metric = 0.769
+Iteration 2400       ->    train_metric = 0.933          val_metric = 0.910
+Iteration 2415       ->    train_metric = 0.776          val_metric = 0.887
+Iteration 2430       ->    train_metric = 0.850          val_metric = 0.895
+Iteration 2445       ->    train_metric = 0.927          val_metric = 0.895
+Iteration 2460       ->    train_metric = 0.918          val_metric = 0.927
+Iteration 2475       ->    train_metric = 0.881          val_metric = 0.930
+Iteration 2490       ->    train_metric = 0.891          val_metric = 0.928
+
+Epoch: 6
+Iteration 2505       ->    train_metric = 0.660          val_metric = 0.854
+Iteration 2520       ->    train_metric = 0.828          val_metric = 0.853
+Iteration 2535       ->    train_metric = 0.876          val_metric = 0.841
+Iteration 2550       ->    train_metric = 0.866          val_metric = 0.910
+Iteration 2565       ->    train_metric = 0.880          val_metric = 0.908
+Iteration 2580       ->    train_metric = 0.844          val_metric = 0.880
+Iteration 2595       ->    train_metric = 0.893          val_metric = 0.910
+Iteration 2610       ->    train_metric = 0.943          val_metric = 0.906
+Iteration 2625       ->    train_metric = 0.914          val_metric = 0.915
+Iteration 2640       ->    train_metric = 0.868          val_metric = 0.887
+Iteration 2655       ->    train_metric = 0.833          val_metric = 0.857
+Iteration 2670       ->    train_metric = 0.937          val_metric = 0.901
+Iteration 2685       ->    train_metric = 0.896          val_metric = 0.923
+Iteration 2700       ->    train_metric = 0.890          val_metric = 0.924
+Iteration 2715       ->    train_metric = 0.932          val_metric = 0.918
+Iteration 2730       ->    train_metric = 0.753          val_metric = 0.801
+Iteration 2745       ->    train_metric = 0.946          val_metric = 0.906
+Iteration 2760       ->    train_metric = 0.826          val_metric = 0.933
+Iteration 2775       ->    train_metric = 0.873          val_metric = 0.826
+Iteration 2790       ->    train_metric = 0.846          val_metric = 0.805
+Iteration 2805       ->    train_metric = 0.930          val_metric = 0.873
+Iteration 2820       ->    train_metric = 0.882          val_metric = 0.902
+Iteration 2835       ->    train_metric = 0.877          val_metric = 0.892
+Iteration 2850       ->    train_metric = 0.945          val_metric = 0.924
+Iteration 2865       ->    train_metric = 0.901          val_metric = 0.894
+Iteration 2880       ->    train_metric = 0.924          val_metric = 0.920
+Iteration 2895       ->    train_metric = 0.918          val_metric = 0.922
+Iteration 2910       ->    train_metric = 0.783          val_metric = 0.901
+
+Epoch: 7
+Iteration 2925       ->    train_metric = 0.866          val_metric = 0.923
+Iteration 2940       ->    train_metric = 0.930          val_metric = 0.929
+Iteration 2955       ->    train_metric = 0.915          val_metric = 0.925
+Iteration 2970       ->    train_metric = 0.766          val_metric = 0.911
+Iteration 2985       ->    train_metric = 0.833          val_metric = 0.906
+Iteration 3000       ->    train_metric = 0.815          val_metric = 0.939
+Iteration 3015       ->    train_metric = 0.835          val_metric = 0.870
+Iteration 3030       ->    train_metric = 0.943          val_metric = 0.937
+Iteration 3045       ->    train_metric = 0.917          val_metric = 0.923
+Iteration 3060       ->    train_metric = 0.907          val_metric = 0.914
+Iteration 3075       ->    train_metric = 0.909          val_metric = 0.890
+Iteration 3090       ->    train_metric = 0.853          val_metric = 0.930
+Iteration 3105       ->    train_metric = 0.747          val_metric = 0.855
+Iteration 3120       ->    train_metric = 0.936          val_metric = 0.924
+Iteration 3135       ->    train_metric = 0.897          val_metric = 0.907
+Iteration 3150       ->    train_metric = 0.916          val_metric = 0.910
+Iteration 3165       ->    train_metric = 0.815          val_metric = 0.918
+Iteration 3180       ->    train_metric = 0.957          val_metric = 0.930
+Iteration 3195       ->    train_metric = 0.927          val_metric = 0.934
+Iteration 3210       ->    train_metric = 0.804          val_metric = 0.866
+Iteration 3225       ->    train_metric = 0.936          val_metric = 0.915
+Iteration 3240       ->    train_metric = 0.888          val_metric = 0.932
+Iteration 3255       ->    train_metric = 0.868          val_metric = 0.914
+Iteration 3270       ->    train_metric = 0.887          val_metric = 0.894
+Iteration 3285       ->    train_metric = 0.892          val_metric = 0.807
+Iteration 3300       ->    train_metric = 0.839          val_metric = 0.891
+Iteration 3315       ->    train_metric = 0.879          val_metric = 0.906
+
+Epoch: 8
+Iteration 3330       ->    train_metric = 0.876          val_metric = 0.923
+Iteration 3345       ->    train_metric = 0.771          val_metric = 0.823
+Iteration 3360       ->    train_metric = 0.938          val_metric = 0.901
+Iteration 3375       ->    train_metric = 0.942          val_metric = 0.924
+Iteration 3390       ->    train_metric = 0.928          val_metric = 0.934
+Iteration 3405       ->    train_metric = 0.737          val_metric = 0.875
+Iteration 3420       ->    train_metric = 0.913          val_metric = 0.917
+Iteration 3435       ->    train_metric = 0.928          val_metric = 0.904
+Iteration 3450       ->    train_metric = 0.783          val_metric = 0.928
+Iteration 3465       ->    train_metric = 0.878          val_metric = 0.922
+Iteration 3480       ->    train_metric = 0.884          val_metric = 0.909
+Iteration 3495       ->    train_metric = 0.840          val_metric = 0.925
+Iteration 3510       ->    train_metric = 0.878          val_metric = 0.900
+Iteration 3525       ->    train_metric = 0.829          val_metric = 0.857
+Iteration 3540       ->    train_metric = 0.925          val_metric = 0.904
+Iteration 3555       ->    train_metric = 0.914          val_metric = 0.906
+Iteration 3570       ->    train_metric = 0.955          val_metric = 0.918
+Iteration 3585       ->    train_metric = 0.893          val_metric = 0.918
+Iteration 3600       ->    train_metric = 0.928          val_metric = 0.928
+Iteration 3615       ->    train_metric = 0.902          val_metric = 0.930
+Iteration 3630       ->    train_metric = 0.907          val_metric = 0.936
+Iteration 3645       ->    train_metric = 0.907          val_metric = 0.928
+Iteration 3660       ->    train_metric = 0.873          val_metric = 0.900
+Iteration 3675       ->    train_metric = 0.922          val_metric = 0.840
+Iteration 3690       ->    train_metric = 0.899          val_metric = 0.855
+Iteration 3705       ->    train_metric = 0.936          val_metric = 0.904
+Iteration 3720       ->    train_metric = 0.862          val_metric = 0.913
+Iteration 3735       ->    train_metric = 0.880          val_metric = 0.907
+
+Epoch: 9
+Iteration 3750       ->    train_metric = 0.885          val_metric = 0.877
+Iteration 3765       ->    train_metric = 0.855          val_metric = 0.897
+Iteration 3780       ->    train_metric = 0.916          val_metric = 0.901
+Iteration 3795       ->    train_metric = 0.918          val_metric = 0.928
+Iteration 3810       ->    train_metric = 0.912          val_metric = 0.920
+Iteration 3825       ->    train_metric = 0.937          val_metric = 0.926
+Iteration 3840       ->    train_metric = 0.921          val_metric = 0.933
+Iteration 3855       ->    train_metric = 0.902          val_metric = 0.919
+Iteration 3870       ->    train_metric = 0.944          val_metric = 0.932
+Iteration 3885       ->    train_metric = 0.926          val_metric = 0.901
+Iteration 3900       ->    train_metric = 0.923          val_metric = 0.937
+Iteration 3915       ->    train_metric = 0.916          val_metric = 0.934
+Iteration 3930       ->    train_metric = 0.858          val_metric = 0.852
+Iteration 3945       ->    train_metric = 0.882          val_metric = 0.904
+Iteration 3960       ->    train_metric = 0.787          val_metric = 0.919
+Iteration 3975       ->    train_metric = 0.877          val_metric = 0.929
+Iteration 3990       ->    train_metric = 0.882          val_metric = 0.890
+Iteration 4005       ->    train_metric = 0.859          val_metric = 0.925
+Iteration 4020       ->    train_metric = 0.967          val_metric = 0.936
+Iteration 4035       ->    train_metric = 0.936          val_metric = 0.929
+Iteration 4050       ->    train_metric = 0.846          val_metric = 0.877
+Iteration 4065       ->    train_metric = 0.929          val_metric = 0.932
+Iteration 4080       ->    train_metric = 0.597          val_metric = 0.924
+Iteration 4095       ->    train_metric = 0.852          val_metric = 0.808
+Iteration 4110       ->    train_metric = 0.954          val_metric = 0.922
+Iteration 4125       ->    train_metric = 0.915          val_metric = 0.882
+Iteration 4140       ->    train_metric = 0.940          val_metric = 0.936
+Iteration 4155       ->    train_metric = 0.881          val_metric = 0.865
+
+Training finished!
+R^2: 0.8920914769807964
+MSE: 244.5603166660896
+Model and optimizer state dicts saved to RetNet_state_dict3.pt and RetNet_optimizer_state_dict3.pt.
