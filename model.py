@@ -95,17 +95,15 @@ class RetNet(nn.Module):
         return x4
     
 class LearningMethod:
-    def __init__(self, network, optimizer, criterion, logger=None):
+    def __init__(self, network, optimizer, criterion):
         self.net = network.double() 
         self.optimizer = optimizer
         self.criterion = criterion
-        self.logger = logger
 
     def train(
             self, train_loader, val_loader,
             val_loss_freq=15, epochs=1, scheduler=None,
-            metric=r2_score, device=None, tb_writer=None,
-            verbose=True, patience=None
+            metric=r2_score, device=None, tb_writer=None, verbose=True
             ):
         
         self.scheduler = scheduler
@@ -118,23 +116,15 @@ class LearningMethod:
         self.train_batch_size = train_loader.batch_size
         self.val_batch_size = val_loader.batch_size
         self.epochs = epochs
-        self.early_stopping_patience = patience
-        self.best_val_loss = float('inf')
-        self.no_improve_epochs = 0
 
-        cycled_val_loader = cycle(val_loader)
+        val_loader = cycle(val_loader)
 
         # Training and validation phase.
         counter = 0
-    
-        best_val_loss = float('inf')  # Initialize best validation loss.
-        best_model_state = None       # To store the best model's state.
-        no_improve_epochs = 0         # Counter for epochs without improvement.
-
         for e in range(epochs):
 
             if verbose:
-                self.logger.info(f'\nEpoch: {e}')
+                print(f'\nEpoch: {e}')
 
             # Training phase.
             for i, (X_train, y_train) in enumerate(train_loader):
@@ -161,7 +151,7 @@ class LearningMethod:
                 if (counter % val_loss_freq == 0):
                     self.net.eval() # Set to inference mode.
 
-                    X_val, y_val = next(cycled_val_loader)
+                    X_val, y_val = next(val_loader)
                     X_val, y_val = X_val.double().to(device), y_val.double().to(device)
 
                     # Account for correct training metric calculation.
@@ -174,55 +164,18 @@ class LearningMethod:
                     train_metric = metric(input=yth.ravel(), target=y_train)
                     val_metric = metric(input=y_val_hat.ravel(), target=y_val)
 
-                    self.logger.info(
-                        f'{f"Iteration {counter}":<20} -> '
-                        f'{f"train_loss = {train_loss.item():.3f}":<22} '
-                        f'{f"val_loss = {val_loss.item():.3f}":<22} '
-                        f'{f"train_metric = {train_metric:.3f}":<22} '
-                        f'{f"val_metric = {val_metric:.3f}":>22}'
-                    )
-
-            # End of epoch validation for early stopping.
-            total_val_loss = 0.0
-            total_samples = 0
-            self.net.eval()  # Set to inference mode.
-            with torch.no_grad():
-                for i, (X_val, y_val) in enumerate(val_loader):
-                    # print(i)
-                    X_val, y_val = X_val.double().to(device), y_val.double().to(device)
-                    y_val_hat = self.net(X_val)
-                    batch_val_loss = self.criterion(input=y_val_hat.ravel(), target=y_val).item()
-                    total_val_loss += batch_val_loss * X_val.size(0)
-                    total_samples += X_val.size(0)
-
-            epoch_val_loss = total_val_loss / total_samples  # Average validation loss.
-
-            # Early stopping logic.
-            if epoch_val_loss < best_val_loss:
-                best_val_loss = epoch_val_loss
-                best_model_state = self.net.state_dict()  # Save best model.
-                no_improve_epochs = 0  # Reset counter.
-            else:
-                no_improve_epochs += 1  # Increment no improvement counter.
-
-            self.logger.info(
-                f'End of Epoch {e}: val_loss = {epoch_val_loss:.3f}, '
-                f'best_val_loss = {best_val_loss:.3f}'
-            )
-
-            if no_improve_epochs >= self.early_stopping_patience:
-                self.logger.info(
-                    f"Early stopping triggered after {e+1} epochs. "
-                    f"No improvement for {self.early_stopping_patience} consecutive epochs."
-                )
-                self.net.load_state_dict(best_model_state)  # Restore best model.
-                break
+                # Print train and validation metric per `val_loss_freq`.
+                if verbose and (counter % val_loss_freq == 0):
+                    print(
+                            f'{f"Iteration {counter}":<20} ->',
+                            f'{f"train_metric = {train_metric:.3f}":<22}',
+                            f'{f"val_metric = {val_metric:.3f}":>22}', sep=4*' '
+                            )
 
             # Learning rate scheduler.
             if scheduler:
                 self.scheduler.step()
-        
-        self.logger.info('\nTraining finished!')
+        print('\nTraining finished!')
 
     @torch.no_grad()
     def predict(self, X):
@@ -231,6 +184,7 @@ class LearningMethod:
         y_pred = self.net(X)
 
         return y_pred
+
 
 class CustomDataset(Dataset):
     def __init__(self, X, y, transform_X=None, transform_y=None):
@@ -320,3 +274,4 @@ def load_data(dir_batch, path_to_csv, target_name, index_col, size=None):
     X = np.load(f'{dir_batch}/clean.npy', mmap_mode='r')
 
     return X[:size], y[:size]
+    
