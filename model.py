@@ -87,6 +87,7 @@ class RetNet(nn.Module):
         
         # Dynamically adjust the input size of the first linear layer
         if self.fc1[2].in_features != x4.size(1):
+            print(x4.size(1))
             self.fc1[2] = nn.Linear(x4.size(1), 1176).double().to(x.device)
         
         x4 = self.fc1(x4)

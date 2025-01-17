@@ -161,7 +161,7 @@ plt.grid(True)
 
 
 # Save the plot as a PNG file
-# plt.savefig(f'./pred/parity_{model_name}.png')
+plt.savefig(f'./pred/parity_{model_name}.png')
 
 
 

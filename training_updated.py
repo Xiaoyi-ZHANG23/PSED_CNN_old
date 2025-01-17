@@ -6,7 +6,7 @@ import torch.optim as optim
 from torchvision import transforms
 from torch.utils.data import DataLoader
 from torcheval.metrics.functional import r2_score
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from model_updated import CustomDataset, Flip, Rotate90, Reflect, Identity
 from model_updated import load_data, LearningMethod, RetNet, init_weights
 import matplotlib.pyplot as plt
@@ -24,16 +24,19 @@ torch.manual_seed(SEED)
 random.seed(SEED)
 
 # eval_freq: evaluate val loos and check early stopping every k batches
-hyper_params = {'batch_size':48, 'num_epochs':300, 'eval_freq':20,
+hyper_params = {'batch_size':64, 'num_epochs':300, 'eval_freq':40,
                 'learning_rate':1e-4, 'weight_decay':1e-4, 'step_size':60, 'gamma':0.5,
                  'optimizer':'Adam', 'patience':100}
 
 
 # load_dir = '/data/yll6162/data/'
 load_dir = '/data/yll6162/mof_cnn/data_mix_13k'
+model_save_dir = '/data/yll6162/mof_cnn/model'
 # target_col = 'Xe_cm3_per_cm3_value'
 target_col = 'Kr_cm3_per_cm3_value'
-model_name = f'Mix_{target_col}'
+# target_col = 'Xe_mol_per_kg_value'
+# target_col = 'Kr_mol_per_kg_value'
+model_name = f'Mix1bar_{target_col}_no_64'
 model_name = f"{model_name}_{hyper_params['batch_size']}_{hyper_params['learning_rate']}_{hyper_params['weight_decay']}_{hyper_params['step_size']}_{hyper_params['gamma']}_{hyper_params['optimizer']}"
 
 def setup_logger(log_dir="./log", log_filename=None):
@@ -128,7 +131,7 @@ test_loader = DataLoader(
 )
 
 # Define the architecture, loss and optimizer.
-net = RetNet().double().to(device)
+net = RetNet().to(device)
 criterion = nn.L1Loss().to(device) 
 optimizer = optim.Adam(net.parameters(), lr=hyper_params['learning_rate'], weight_decay=hyper_params['weight_decay'])
 
@@ -168,12 +171,31 @@ for x, _ in test_loader:
 y_pred = torch.cat(predictions).numpy()
 y_true = y_test.reshape(len(y_test), -1)
 
+
+# Save the trained model.
+# See also -> https://pytorch.org/tutorials/beginner/saving_loading_models.html
+#torch.save(model, f'{model_name}.pt')
+model_save_path = f'{model_save_dir}/{model_name}_state_dict4.pt'
+optimizer_save_path = f'{model_save_dir}/{model_name}_optimizer_state_dict4.pt'
+
+torch.save({
+    'model_state_dict': net.state_dict(),
+    'optimizer_state_dict': optimizer.state_dict(),
+    'epoch': hyper_params['num_epochs'],  # or whatever the current epoch is
+    'loss': criterion,  # optionally save the loss function
+}, model_save_path)
+
+logger.info(f'Model and optimizer state dicts saved to {model_save_path} and {optimizer_save_path}.')
+
 # Calculate R^2 and MSE
 r2 = r2_score(torch.tensor(y_pred), torch.tensor(y_true)).item()
 mse = mean_squared_error(y_true, y_pred)
+mae = mean_absolute_error(y_true, y_pred)
 
 logger.info(f'R^2: {r2}')
 logger.info(f'MSE: {mse}')
+logger.info(f'MAE: {mae}')
+
 
 # Plot Parity Plot
 plt.figure(figsize=(8, 8))
@@ -191,17 +213,3 @@ plt.savefig(f'./pred/parity_{model_name}.png')
 
 # plt.show()
 
-# Save the trained model.
-# See also -> https://pytorch.org/tutorials/beginner/saving_loading_models.html
-#torch.save(model, f'{model_name}.pt')
-model_save_path = f'./model/{model_name}_state_dict4.pt'
-optimizer_save_path = f'./model/{model_name}_optimizer_state_dict4.pt'
-
-torch.save({
-    'model_state_dict': net.state_dict(),
-    'optimizer_state_dict': optimizer.state_dict(),
-    'epoch': hyper_params['num_epochs'],  # or whatever the current epoch is
-    'loss': criterion,  # optionally save the loss function
-}, model_save_path)
-
-logger.info(f'Model and optimizer state dicts saved to {model_save_path} and {optimizer_save_path}.')

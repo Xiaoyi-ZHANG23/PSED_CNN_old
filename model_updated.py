@@ -67,7 +67,7 @@ class RetNet(nn.Module):
         )
 
     def forward(self, x):
-        x = x.double()
+        x = x
         x1 = self.conv1(x)
         x2 = self.conv2(x1)
         
@@ -83,11 +83,8 @@ class RetNet(nn.Module):
         x4 = self.conv5(x4)
         
         # Flatten x4
-        x4 = x4.flatten(1).double()
+        x4 = x4.flatten(1)
 
-        # # Dynamically adjust the input size of the first linear layer
-        # if self.fc1[2].in_features != x4.size(1):
-        #     self.fc1[2] = nn.Linear(x4.size(1), 1176).double().to(x.device)
         
         x4 = self.fc1(x4)
         x4 = self.fc2(x4)
@@ -96,7 +93,7 @@ class RetNet(nn.Module):
     
 class LearningMethod:
     def __init__(self, network, optimizer, criterion, logger=None):
-        self.net = network.double() 
+        self.net = network 
         self.optimizer = optimizer
         self.criterion = criterion
         self.logger = logger
@@ -139,8 +136,8 @@ class LearningMethod:
             # Training phase.
             for X_train, y_train in train_loader:
                 self.net.train() # Set to training mode.
-                X_train = X_train.double().to(device)
-                y_train = y_train.double().to(device)# Convert labels to Double
+                X_train = X_train.to(device)
+                y_train = y_train.to(device)# Convert labels to Double
                 # Keep track of the iteration number.
                 counter += 1
 
@@ -162,7 +159,7 @@ class LearningMethod:
                     self.net.eval() # Set to inference mode.
 
                     X_val, y_val = next(cycled_val_loader)
-                    X_val, y_val = X_val.double().to(device), y_val.double().to(device)
+                    X_val, y_val = X_val.to(device), y_val.to(device)
 
                     # Account for correct training metric calculation.
                     yth = self.predict(X_train)
@@ -189,7 +186,7 @@ class LearningMethod:
             with torch.no_grad():
                 for i, (X_val, y_val) in enumerate(val_loader):
                     # print(i)
-                    X_val, y_val = X_val.double().to(device), y_val.double().to(device)
+                    X_val, y_val = X_val.to(device), y_val.to(device)
                     y_val_hat = self.net(X_val)
                     batch_val_loss = self.criterion(input=y_val_hat.ravel(), target=y_val).item()
                     total_val_loss += batch_val_loss * X_val.size(0)
@@ -227,7 +224,7 @@ class LearningMethod:
     @torch.no_grad()
     def predict(self, X):
         self.net.eval()
-        X = X.double() 
+        X = X 
         y_pred = self.net(X)
 
         return y_pred
@@ -236,15 +233,15 @@ class CustomDataset(Dataset):
     def __init__(self, X, y, transform_X=None, transform_y=None):
         self.transform_X = transform_X
         self.transform_y = transform_y
-        self.X = X.astype(np.float64)
-        self.y = y.astype(np.float64)
+        self.X = X.astype(np.float32)
+        self.y = y.astype(np.float32)
 
     def __len__(self):
         return len(self.y)
 
     def __getitem__(self, idx):
-        sample_x = torch.tensor(self.X[idx], dtype=torch.float64)
-        sample_y = torch.tensor(self.y[idx], dtype=torch.float64)
+        sample_x = torch.tensor(self.X[idx], dtype=torch.float32)
+        sample_y = torch.tensor(self.y[idx], dtype=torch.float32)
         if self.transform_X:
             sample_x = self.transform_X(sample_x)
         if self.transform_y:
@@ -316,7 +313,7 @@ def load_data(dir_batch, path_to_csv, target_name, index_col, size=None):
     print(dir_batch, len(names))
     df = pd.read_csv(path_to_csv, index_col=index_col)
 
-    y = df.loc[names, target_name].values.astype('double')
+    y = df.loc[names, target_name].values
     X = np.load(f'{dir_batch}/clean.npy', mmap_mode='r')
     if size is None:
         return X, y
