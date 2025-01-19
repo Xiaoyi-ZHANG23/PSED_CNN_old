@@ -87,6 +87,7 @@ class RetNet(nn.Module):
         
         # Dynamically adjust the input size of the first linear layer
         if self.fc1[2].in_features != x4.size(1):
+            print(x4.size(1))
             self.fc1[2] = nn.Linear(x4.size(1), 1176).double().to(x.device)
         
         x4 = self.fc1(x4)
@@ -274,3 +275,4 @@ def load_data(dir_batch, path_to_csv, target_name, index_col, size=None):
     X = np.load(f'{dir_batch}/clean.npy', mmap_mode='r')
 
     return X[:size], y[:size]
+    

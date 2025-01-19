@@ -21,19 +21,23 @@ random.seed(1)
 # See also -> https://pytorch.org/get-started/locally/
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+model_name = 'MixGasRetNet'
+data_dir = '/data/yll6162/mof_cnn/data_mix_13k'
+target = 'Xe_mol_per_kg_value'
+
 # Load training data.
 X_train, y_train = load_data(
-    'data/train',
-    'data/all.csv',
-    'cm3_per_cm3_value',
+    f'{data_dir}/train',
+    f'{data_dir}/all.csv',
+    target,
     'project',
 )
 
 # Load validation data.
 X_val, y_val = load_data(
-    'data/test',
-    'data/all.csv',
-    'cm3_per_cm3_value',
+    f'{data_dir}/test',
+    f'{data_dir}/all.csv',
+    target,
     'project',
     size=1000
 )
@@ -81,7 +85,7 @@ torch.nn.init.constant_(net.fc2[-1].bias, y_train.mean())
 
 model = LearningMethod(net, optimizer, criterion)
 print(net)
-model_name = 'RetNet'
+
 
 # Use Tensorboard. Needs to be fixed!
 # See also -> https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html
@@ -119,7 +123,7 @@ plt.title('Parity Plot')
 plt.grid(True)
 
 # Save the plot as a PNG file
-plt.savefig('parity_plot12-4.png')
+plt.savefig(f'{model_name}_parity_plot12-4.png')
 
 plt.show()
 
