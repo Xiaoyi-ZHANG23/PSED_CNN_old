@@ -1,0 +1,701 @@
+2025-01-29 12:40:46,623 - INFO - Hyperparameters: {'batch_size': 64, 'num_epochs': 300, 'eval_freq': 40, 'learning_rate': 0.0001, 'weight_decay': 0.0001, 'step_size': 60, 'gamma': 0.5, 'optimizer': 'Adam', 'patience': 100}
+2025-01-29 12:40:47,432 - INFO - Using device: cuda
+2025-01-29 12:40:47,779 - INFO - Train shapes: X=(12355, 41, 41, 41), y=(12355,), pld=(12355,)
+2025-01-29 12:40:47,779 - INFO - Test shapes:  X=(1373, 41, 41, 41),      y=(1373,),      pld=(1373,)
+2025-01-29 12:45:37,659 - INFO - Final TRAIN: (11119, 41, 41, 41), (11119,), (11119,)
+2025-01-29 12:45:37,659 - INFO - VAL:         (1236, 41, 41, 41), (1236,), (1236,)
+/home/ekn8665/.conda/envs/CNN/lib/python3.11/site-packages/torch/optim/lr_scheduler.py:60: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn(
+2025-01-29 12:45:44,858 - INFO - Model initialized.
+2025-01-29 12:45:44,859 - INFO - 
+Epoch: 0
+2025-01-29 12:46:01,123 - INFO - End of Epoch 0: val_loss = 13.231, val_metric = 0.229, best_val_loss = 13.231
+2025-01-29 12:46:01,123 - INFO - 
+Epoch: 1
+2025-01-29 12:46:10,812 - INFO - End of Epoch 1: val_loss = 13.321, val_metric = 0.216, best_val_loss = 13.231
+2025-01-29 12:46:10,812 - INFO - 
+Epoch: 2
+2025-01-29 12:46:20,508 - INFO - End of Epoch 2: val_loss = 12.472, val_metric = 0.292, best_val_loss = 12.472
+2025-01-29 12:46:20,509 - INFO - 
+Epoch: 3
+2025-01-29 12:46:30,197 - INFO - End of Epoch 3: val_loss = 12.223, val_metric = 0.314, best_val_loss = 12.223
+2025-01-29 12:46:30,197 - INFO - 
+Epoch: 4
+2025-01-29 12:46:39,885 - INFO - End of Epoch 4: val_loss = 12.014, val_metric = 0.335, best_val_loss = 12.014
+2025-01-29 12:46:39,885 - INFO - 
+Epoch: 5
+2025-01-29 12:46:49,579 - INFO - End of Epoch 5: val_loss = 12.311, val_metric = 0.323, best_val_loss = 12.014
+2025-01-29 12:46:49,579 - INFO - 
+Epoch: 6
+2025-01-29 12:46:59,267 - INFO - End of Epoch 6: val_loss = 11.238, val_metric = 0.410, best_val_loss = 11.238
+2025-01-29 12:46:59,267 - INFO - 
+Epoch: 7
+2025-01-29 12:47:08,956 - INFO - End of Epoch 7: val_loss = 10.997, val_metric = 0.427, best_val_loss = 10.997
+2025-01-29 12:47:08,957 - INFO - 
+Epoch: 8
+2025-01-29 12:47:18,645 - INFO - End of Epoch 8: val_loss = 10.652, val_metric = 0.470, best_val_loss = 10.652
+2025-01-29 12:47:18,646 - INFO - 
+Epoch: 9
+2025-01-29 12:47:28,332 - INFO - End of Epoch 9: val_loss = 11.008, val_metric = 0.439, best_val_loss = 10.652
+2025-01-29 12:47:28,332 - INFO - 
+Epoch: 10
+2025-01-29 12:47:38,023 - INFO - End of Epoch 10: val_loss = 10.419, val_metric = 0.479, best_val_loss = 10.419
+2025-01-29 12:47:38,024 - INFO - 
+Epoch: 11
+2025-01-29 12:47:47,711 - INFO - End of Epoch 11: val_loss = 9.818, val_metric = 0.537, best_val_loss = 9.818
+2025-01-29 12:47:47,711 - INFO - 
+Epoch: 12
+2025-01-29 12:47:57,401 - INFO - End of Epoch 12: val_loss = 9.579, val_metric = 0.545, best_val_loss = 9.579
+2025-01-29 12:47:57,402 - INFO - 
+Epoch: 13
+2025-01-29 12:48:07,089 - INFO - End of Epoch 13: val_loss = 9.325, val_metric = 0.570, best_val_loss = 9.325
+2025-01-29 12:48:07,089 - INFO - 
+Epoch: 14
+2025-01-29 12:48:16,778 - INFO - End of Epoch 14: val_loss = 8.562, val_metric = 0.604, best_val_loss = 8.562
+2025-01-29 12:48:16,778 - INFO - 
+Epoch: 15
+2025-01-29 12:48:26,465 - INFO - End of Epoch 15: val_loss = 8.579, val_metric = 0.626, best_val_loss = 8.562
+2025-01-29 12:48:26,466 - INFO - 
+Epoch: 16
+2025-01-29 12:48:36,154 - INFO - End of Epoch 16: val_loss = 9.272, val_metric = 0.574, best_val_loss = 8.562
+2025-01-29 12:48:36,154 - INFO - 
+Epoch: 17
+2025-01-29 12:48:45,844 - INFO - End of Epoch 17: val_loss = 7.338, val_metric = 0.679, best_val_loss = 7.338
+2025-01-29 12:48:45,844 - INFO - 
+Epoch: 18
+2025-01-29 12:48:55,532 - INFO - End of Epoch 18: val_loss = 8.012, val_metric = 0.657, best_val_loss = 7.338
+2025-01-29 12:48:55,532 - INFO - 
+Epoch: 19
+2025-01-29 12:49:05,221 - INFO - End of Epoch 19: val_loss = 7.326, val_metric = 0.681, best_val_loss = 7.326
+2025-01-29 12:49:05,224 - INFO - 
+Epoch: 20
+2025-01-29 12:49:14,914 - INFO - End of Epoch 20: val_loss = 6.781, val_metric = 0.715, best_val_loss = 6.781
+2025-01-29 12:49:14,915 - INFO - 
+Epoch: 21
+2025-01-29 12:49:24,609 - INFO - End of Epoch 21: val_loss = 6.939, val_metric = 0.719, best_val_loss = 6.781
+2025-01-29 12:49:24,609 - INFO - 
+Epoch: 22
+2025-01-29 12:49:34,299 - INFO - End of Epoch 22: val_loss = 6.119, val_metric = 0.748, best_val_loss = 6.119
+2025-01-29 12:49:34,299 - INFO - 
+Epoch: 23
+2025-01-29 12:49:43,987 - INFO - End of Epoch 23: val_loss = 8.344, val_metric = 0.634, best_val_loss = 6.119
+2025-01-29 12:49:43,987 - INFO - 
+Epoch: 24
+2025-01-29 12:49:53,677 - INFO - End of Epoch 24: val_loss = 5.526, val_metric = 0.780, best_val_loss = 5.526
+2025-01-29 12:49:53,677 - INFO - 
+Epoch: 25
+2025-01-29 12:50:03,365 - INFO - End of Epoch 25: val_loss = 6.342, val_metric = 0.768, best_val_loss = 5.526
+2025-01-29 12:50:03,365 - INFO - 
+Epoch: 26
+2025-01-29 12:50:13,054 - INFO - End of Epoch 26: val_loss = 5.821, val_metric = 0.781, best_val_loss = 5.526
+2025-01-29 12:50:13,054 - INFO - 
+Epoch: 27
+2025-01-29 12:50:22,745 - INFO - End of Epoch 27: val_loss = 5.730, val_metric = 0.782, best_val_loss = 5.526
+2025-01-29 12:50:22,746 - INFO - 
+Epoch: 28
+2025-01-29 12:50:32,434 - INFO - End of Epoch 28: val_loss = 5.328, val_metric = 0.802, best_val_loss = 5.328
+2025-01-29 12:50:32,434 - INFO - 
+Epoch: 29
+2025-01-29 12:50:42,123 - INFO - End of Epoch 29: val_loss = 5.410, val_metric = 0.792, best_val_loss = 5.328
+2025-01-29 12:50:42,123 - INFO - 
+Epoch: 30
+2025-01-29 12:50:51,811 - INFO - End of Epoch 30: val_loss = 6.509, val_metric = 0.735, best_val_loss = 5.328
+2025-01-29 12:50:51,812 - INFO - 
+Epoch: 31
+2025-01-29 12:51:01,501 - INFO - End of Epoch 31: val_loss = 5.098, val_metric = 0.819, best_val_loss = 5.098
+2025-01-29 12:51:01,501 - INFO - 
+Epoch: 32
+2025-01-29 12:51:11,186 - INFO - End of Epoch 32: val_loss = 5.229, val_metric = 0.813, best_val_loss = 5.098
+2025-01-29 12:51:11,186 - INFO - 
+Epoch: 33
+2025-01-29 12:51:20,875 - INFO - End of Epoch 33: val_loss = 4.489, val_metric = 0.836, best_val_loss = 4.489
+2025-01-29 12:51:20,875 - INFO - 
+Epoch: 34
+2025-01-29 12:51:30,562 - INFO - End of Epoch 34: val_loss = 5.472, val_metric = 0.806, best_val_loss = 4.489
+2025-01-29 12:51:30,563 - INFO - 
+Epoch: 35
+2025-01-29 12:51:40,251 - INFO - End of Epoch 35: val_loss = 4.294, val_metric = 0.849, best_val_loss = 4.294
+2025-01-29 12:51:40,252 - INFO - 
+Epoch: 36
+2025-01-29 12:51:49,942 - INFO - End of Epoch 36: val_loss = 6.458, val_metric = 0.751, best_val_loss = 4.294
+2025-01-29 12:51:49,942 - INFO - 
+Epoch: 37
+2025-01-29 12:51:59,628 - INFO - End of Epoch 37: val_loss = 4.459, val_metric = 0.843, best_val_loss = 4.294
+2025-01-29 12:51:59,628 - INFO - 
+Epoch: 38
+2025-01-29 12:52:09,315 - INFO - End of Epoch 38: val_loss = 4.578, val_metric = 0.830, best_val_loss = 4.294
+2025-01-29 12:52:09,315 - INFO - 
+Epoch: 39
+2025-01-29 12:52:19,007 - INFO - End of Epoch 39: val_loss = 5.123, val_metric = 0.817, best_val_loss = 4.294
+2025-01-29 12:52:19,008 - INFO - 
+Epoch: 40
+2025-01-29 12:52:28,695 - INFO - End of Epoch 40: val_loss = 4.259, val_metric = 0.839, best_val_loss = 4.259
+2025-01-29 12:52:28,696 - INFO - 
+Epoch: 41
+2025-01-29 12:52:38,383 - INFO - End of Epoch 41: val_loss = 4.353, val_metric = 0.836, best_val_loss = 4.259
+2025-01-29 12:52:38,383 - INFO - 
+Epoch: 42
+2025-01-29 12:52:48,072 - INFO - End of Epoch 42: val_loss = 4.651, val_metric = 0.824, best_val_loss = 4.259
+2025-01-29 12:52:48,072 - INFO - 
+Epoch: 43
+2025-01-29 12:52:57,759 - INFO - End of Epoch 43: val_loss = 6.916, val_metric = 0.716, best_val_loss = 4.259
+2025-01-29 12:52:57,760 - INFO - 
+Epoch: 44
+2025-01-29 12:53:07,448 - INFO - End of Epoch 44: val_loss = 4.405, val_metric = 0.833, best_val_loss = 4.259
+2025-01-29 12:53:07,448 - INFO - 
+Epoch: 45
+2025-01-29 12:53:17,138 - INFO - End of Epoch 45: val_loss = 4.366, val_metric = 0.837, best_val_loss = 4.259
+2025-01-29 12:53:17,139 - INFO - 
+Epoch: 46
+2025-01-29 12:53:26,827 - INFO - End of Epoch 46: val_loss = 4.812, val_metric = 0.812, best_val_loss = 4.259
+2025-01-29 12:53:26,827 - INFO - 
+Epoch: 47
+2025-01-29 12:53:36,514 - INFO - End of Epoch 47: val_loss = 4.820, val_metric = 0.837, best_val_loss = 4.259
+2025-01-29 12:53:36,514 - INFO - 
+Epoch: 48
+2025-01-29 12:53:46,203 - INFO - End of Epoch 48: val_loss = 4.184, val_metric = 0.854, best_val_loss = 4.184
+2025-01-29 12:53:46,203 - INFO - 
+Epoch: 49
+2025-01-29 12:53:55,891 - INFO - End of Epoch 49: val_loss = 4.980, val_metric = 0.823, best_val_loss = 4.184
+2025-01-29 12:53:55,892 - INFO - 
+Epoch: 50
+2025-01-29 12:54:05,580 - INFO - End of Epoch 50: val_loss = 4.563, val_metric = 0.834, best_val_loss = 4.184
+2025-01-29 12:54:05,580 - INFO - 
+Epoch: 51
+2025-01-29 12:54:15,266 - INFO - End of Epoch 51: val_loss = 4.915, val_metric = 0.822, best_val_loss = 4.184
+2025-01-29 12:54:15,266 - INFO - 
+Epoch: 52
+2025-01-29 12:54:24,955 - INFO - End of Epoch 52: val_loss = 4.501, val_metric = 0.812, best_val_loss = 4.184
+2025-01-29 12:54:24,955 - INFO - 
+Epoch: 53
+2025-01-29 12:54:34,644 - INFO - End of Epoch 53: val_loss = 4.569, val_metric = 0.834, best_val_loss = 4.184
+2025-01-29 12:54:34,644 - INFO - 
+Epoch: 54
+2025-01-29 12:54:44,332 - INFO - End of Epoch 54: val_loss = 4.339, val_metric = 0.825, best_val_loss = 4.184
+2025-01-29 12:54:44,333 - INFO - 
+Epoch: 55
+2025-01-29 12:54:54,020 - INFO - End of Epoch 55: val_loss = 4.617, val_metric = 0.823, best_val_loss = 4.184
+2025-01-29 12:54:54,020 - INFO - 
+Epoch: 56
+2025-01-29 12:55:03,709 - INFO - End of Epoch 56: val_loss = 4.373, val_metric = 0.826, best_val_loss = 4.184
+2025-01-29 12:55:03,709 - INFO - 
+Epoch: 57
+2025-01-29 12:55:13,398 - INFO - End of Epoch 57: val_loss = 4.328, val_metric = 0.842, best_val_loss = 4.184
+2025-01-29 12:55:13,398 - INFO - 
+Epoch: 58
+2025-01-29 12:55:23,083 - INFO - End of Epoch 58: val_loss = 4.782, val_metric = 0.831, best_val_loss = 4.184
+2025-01-29 12:55:23,083 - INFO - 
+Epoch: 59
+2025-01-29 12:55:32,769 - INFO - End of Epoch 59: val_loss = 5.710, val_metric = 0.764, best_val_loss = 4.184
+2025-01-29 12:55:32,769 - INFO - 
+Epoch: 60
+2025-01-29 12:55:42,453 - INFO - End of Epoch 60: val_loss = 4.314, val_metric = 0.838, best_val_loss = 4.184
+2025-01-29 12:55:42,453 - INFO - 
+Epoch: 61
+2025-01-29 12:55:52,136 - INFO - End of Epoch 61: val_loss = 4.270, val_metric = 0.839, best_val_loss = 4.184
+2025-01-29 12:55:52,137 - INFO - 
+Epoch: 62
+2025-01-29 12:56:01,819 - INFO - End of Epoch 62: val_loss = 4.474, val_metric = 0.830, best_val_loss = 4.184
+2025-01-29 12:56:01,819 - INFO - 
+Epoch: 63
+2025-01-29 12:56:11,505 - INFO - End of Epoch 63: val_loss = 4.753, val_metric = 0.823, best_val_loss = 4.184
+2025-01-29 12:56:11,505 - INFO - 
+Epoch: 64
+2025-01-29 12:56:21,191 - INFO - End of Epoch 64: val_loss = 4.316, val_metric = 0.833, best_val_loss = 4.184
+2025-01-29 12:56:21,191 - INFO - 
+Epoch: 65
+2025-01-29 12:56:30,876 - INFO - End of Epoch 65: val_loss = 4.313, val_metric = 0.829, best_val_loss = 4.184
+2025-01-29 12:56:30,876 - INFO - 
+Epoch: 66
+2025-01-29 12:56:40,559 - INFO - End of Epoch 66: val_loss = 4.760, val_metric = 0.816, best_val_loss = 4.184
+2025-01-29 12:56:40,559 - INFO - 
+Epoch: 67
+2025-01-29 12:56:50,243 - INFO - End of Epoch 67: val_loss = 4.620, val_metric = 0.820, best_val_loss = 4.184
+2025-01-29 12:56:50,243 - INFO - 
+Epoch: 68
+2025-01-29 12:56:59,926 - INFO - End of Epoch 68: val_loss = 4.138, val_metric = 0.846, best_val_loss = 4.138
+2025-01-29 12:56:59,926 - INFO - 
+Epoch: 69
+2025-01-29 12:57:09,612 - INFO - End of Epoch 69: val_loss = 4.214, val_metric = 0.828, best_val_loss = 4.138
+2025-01-29 12:57:09,612 - INFO - 
+Epoch: 70
+2025-01-29 12:57:19,297 - INFO - End of Epoch 70: val_loss = 5.204, val_metric = 0.783, best_val_loss = 4.138
+2025-01-29 12:57:19,297 - INFO - 
+Epoch: 71
+2025-01-29 12:57:28,983 - INFO - End of Epoch 71: val_loss = 4.307, val_metric = 0.836, best_val_loss = 4.138
+2025-01-29 12:57:28,984 - INFO - 
+Epoch: 72
+2025-01-29 12:57:38,665 - INFO - End of Epoch 72: val_loss = 4.349, val_metric = 0.835, best_val_loss = 4.138
+2025-01-29 12:57:38,666 - INFO - 
+Epoch: 73
+2025-01-29 12:57:48,349 - INFO - End of Epoch 73: val_loss = 4.251, val_metric = 0.837, best_val_loss = 4.138
+2025-01-29 12:57:48,349 - INFO - 
+Epoch: 74
+2025-01-29 12:57:58,032 - INFO - End of Epoch 74: val_loss = 4.358, val_metric = 0.824, best_val_loss = 4.138
+2025-01-29 12:57:58,033 - INFO - 
+Epoch: 75
+2025-01-29 12:58:07,716 - INFO - End of Epoch 75: val_loss = 4.660, val_metric = 0.800, best_val_loss = 4.138
+2025-01-29 12:58:07,716 - INFO - 
+Epoch: 76
+2025-01-29 12:58:17,398 - INFO - End of Epoch 76: val_loss = 4.604, val_metric = 0.837, best_val_loss = 4.138
+2025-01-29 12:58:17,399 - INFO - 
+Epoch: 77
+2025-01-29 12:58:27,082 - INFO - End of Epoch 77: val_loss = 4.364, val_metric = 0.838, best_val_loss = 4.138
+2025-01-29 12:58:27,082 - INFO - 
+Epoch: 78
+2025-01-29 12:58:36,765 - INFO - End of Epoch 78: val_loss = 4.133, val_metric = 0.847, best_val_loss = 4.133
+2025-01-29 12:58:36,765 - INFO - 
+Epoch: 79
+2025-01-29 12:58:46,453 - INFO - End of Epoch 79: val_loss = 4.776, val_metric = 0.817, best_val_loss = 4.133
+2025-01-29 12:58:46,453 - INFO - 
+Epoch: 80
+2025-01-29 12:58:56,136 - INFO - End of Epoch 80: val_loss = 4.730, val_metric = 0.825, best_val_loss = 4.133
+2025-01-29 12:58:56,136 - INFO - 
+Epoch: 81
+2025-01-29 12:59:05,820 - INFO - End of Epoch 81: val_loss = 4.665, val_metric = 0.809, best_val_loss = 4.133
+2025-01-29 12:59:05,821 - INFO - 
+Epoch: 82
+2025-01-29 12:59:15,502 - INFO - End of Epoch 82: val_loss = 4.437, val_metric = 0.826, best_val_loss = 4.133
+2025-01-29 12:59:15,502 - INFO - 
+Epoch: 83
+2025-01-29 12:59:25,188 - INFO - End of Epoch 83: val_loss = 4.605, val_metric = 0.819, best_val_loss = 4.133
+2025-01-29 12:59:25,188 - INFO - 
+Epoch: 84
+2025-01-29 12:59:34,870 - INFO - End of Epoch 84: val_loss = 4.924, val_metric = 0.820, best_val_loss = 4.133
+2025-01-29 12:59:34,870 - INFO - 
+Epoch: 85
+2025-01-29 12:59:44,553 - INFO - End of Epoch 85: val_loss = 4.826, val_metric = 0.816, best_val_loss = 4.133
+2025-01-29 12:59:44,553 - INFO - 
+Epoch: 86
+2025-01-29 12:59:54,235 - INFO - End of Epoch 86: val_loss = 4.597, val_metric = 0.825, best_val_loss = 4.133
+2025-01-29 12:59:54,236 - INFO - 
+Epoch: 87
+2025-01-29 13:00:03,923 - INFO - End of Epoch 87: val_loss = 4.172, val_metric = 0.837, best_val_loss = 4.133
+2025-01-29 13:00:03,924 - INFO - 
+Epoch: 88
+2025-01-29 13:00:13,610 - INFO - End of Epoch 88: val_loss = 4.440, val_metric = 0.824, best_val_loss = 4.133
+2025-01-29 13:00:13,610 - INFO - 
+Epoch: 89
+2025-01-29 13:00:23,296 - INFO - End of Epoch 89: val_loss = 4.367, val_metric = 0.832, best_val_loss = 4.133
+2025-01-29 13:00:23,296 - INFO - 
+Epoch: 90
+2025-01-29 13:00:32,981 - INFO - End of Epoch 90: val_loss = 4.355, val_metric = 0.834, best_val_loss = 4.133
+2025-01-29 13:00:32,981 - INFO - 
+Epoch: 91
+2025-01-29 13:00:42,663 - INFO - End of Epoch 91: val_loss = 4.459, val_metric = 0.827, best_val_loss = 4.133
+2025-01-29 13:00:42,663 - INFO - 
+Epoch: 92
+2025-01-29 13:00:52,349 - INFO - End of Epoch 92: val_loss = 4.536, val_metric = 0.822, best_val_loss = 4.133
+2025-01-29 13:00:52,349 - INFO - 
+Epoch: 93
+2025-01-29 13:01:02,033 - INFO - End of Epoch 93: val_loss = 4.487, val_metric = 0.817, best_val_loss = 4.133
+2025-01-29 13:01:02,033 - INFO - 
+Epoch: 94
+2025-01-29 13:01:11,717 - INFO - End of Epoch 94: val_loss = 4.331, val_metric = 0.842, best_val_loss = 4.133
+2025-01-29 13:01:11,718 - INFO - 
+Epoch: 95
+2025-01-29 13:01:21,404 - INFO - End of Epoch 95: val_loss = 4.337, val_metric = 0.820, best_val_loss = 4.133
+2025-01-29 13:01:21,405 - INFO - 
+Epoch: 96
+2025-01-29 13:01:31,090 - INFO - End of Epoch 96: val_loss = 4.461, val_metric = 0.830, best_val_loss = 4.133
+2025-01-29 13:01:31,090 - INFO - 
+Epoch: 97
+2025-01-29 13:01:40,778 - INFO - End of Epoch 97: val_loss = 4.395, val_metric = 0.831, best_val_loss = 4.133
+2025-01-29 13:01:40,778 - INFO - 
+Epoch: 98
+2025-01-29 13:01:50,462 - INFO - End of Epoch 98: val_loss = 4.484, val_metric = 0.828, best_val_loss = 4.133
+2025-01-29 13:01:50,463 - INFO - 
+Epoch: 99
+2025-01-29 13:02:00,150 - INFO - End of Epoch 99: val_loss = 5.006, val_metric = 0.805, best_val_loss = 4.133
+2025-01-29 13:02:00,150 - INFO - 
+Epoch: 100
+2025-01-29 13:02:09,833 - INFO - End of Epoch 100: val_loss = 4.544, val_metric = 0.821, best_val_loss = 4.133
+2025-01-29 13:02:09,834 - INFO - 
+Epoch: 101
+2025-01-29 13:02:19,519 - INFO - End of Epoch 101: val_loss = 4.686, val_metric = 0.826, best_val_loss = 4.133
+2025-01-29 13:02:19,519 - INFO - 
+Epoch: 102
+2025-01-29 13:02:29,206 - INFO - End of Epoch 102: val_loss = 4.302, val_metric = 0.834, best_val_loss = 4.133
+2025-01-29 13:02:29,206 - INFO - 
+Epoch: 103
+2025-01-29 13:02:38,893 - INFO - End of Epoch 103: val_loss = 4.760, val_metric = 0.819, best_val_loss = 4.133
+2025-01-29 13:02:38,893 - INFO - 
+Epoch: 104
+2025-01-29 13:02:48,581 - INFO - End of Epoch 104: val_loss = 4.293, val_metric = 0.838, best_val_loss = 4.133
+2025-01-29 13:02:48,581 - INFO - 
+Epoch: 105
+2025-01-29 13:02:58,268 - INFO - End of Epoch 105: val_loss = 4.637, val_metric = 0.815, best_val_loss = 4.133
+2025-01-29 13:02:58,269 - INFO - 
+Epoch: 106
+2025-01-29 13:03:07,953 - INFO - End of Epoch 106: val_loss = 4.182, val_metric = 0.837, best_val_loss = 4.133
+2025-01-29 13:03:07,953 - INFO - 
+Epoch: 107
+2025-01-29 13:03:17,639 - INFO - End of Epoch 107: val_loss = 4.384, val_metric = 0.835, best_val_loss = 4.133
+2025-01-29 13:03:17,639 - INFO - 
+Epoch: 108
+2025-01-29 13:03:27,324 - INFO - End of Epoch 108: val_loss = 4.478, val_metric = 0.837, best_val_loss = 4.133
+2025-01-29 13:03:27,324 - INFO - 
+Epoch: 109
+2025-01-29 13:03:37,012 - INFO - End of Epoch 109: val_loss = 4.576, val_metric = 0.824, best_val_loss = 4.133
+2025-01-29 13:03:37,012 - INFO - 
+Epoch: 110
+2025-01-29 13:03:46,699 - INFO - End of Epoch 110: val_loss = 4.449, val_metric = 0.826, best_val_loss = 4.133
+2025-01-29 13:03:46,699 - INFO - 
+Epoch: 111
+2025-01-29 13:03:56,383 - INFO - End of Epoch 111: val_loss = 4.289, val_metric = 0.832, best_val_loss = 4.133
+2025-01-29 13:03:56,383 - INFO - 
+Epoch: 112
+2025-01-29 13:04:06,069 - INFO - End of Epoch 112: val_loss = 4.344, val_metric = 0.831, best_val_loss = 4.133
+2025-01-29 13:04:06,069 - INFO - 
+Epoch: 113
+2025-01-29 13:04:15,756 - INFO - End of Epoch 113: val_loss = 4.645, val_metric = 0.825, best_val_loss = 4.133
+2025-01-29 13:04:15,756 - INFO - 
+Epoch: 114
+2025-01-29 13:04:25,444 - INFO - End of Epoch 114: val_loss = 5.283, val_metric = 0.792, best_val_loss = 4.133
+2025-01-29 13:04:25,444 - INFO - 
+Epoch: 115
+2025-01-29 13:04:35,128 - INFO - End of Epoch 115: val_loss = 4.410, val_metric = 0.827, best_val_loss = 4.133
+2025-01-29 13:04:35,128 - INFO - 
+Epoch: 116
+2025-01-29 13:04:44,817 - INFO - End of Epoch 116: val_loss = 4.297, val_metric = 0.836, best_val_loss = 4.133
+2025-01-29 13:04:44,817 - INFO - 
+Epoch: 117
+2025-01-29 13:04:54,503 - INFO - End of Epoch 117: val_loss = 4.305, val_metric = 0.835, best_val_loss = 4.133
+2025-01-29 13:04:54,503 - INFO - 
+Epoch: 118
+2025-01-29 13:05:04,192 - INFO - End of Epoch 118: val_loss = 4.327, val_metric = 0.838, best_val_loss = 4.133
+2025-01-29 13:05:04,193 - INFO - 
+Epoch: 119
+2025-01-29 13:05:13,880 - INFO - End of Epoch 119: val_loss = 4.285, val_metric = 0.838, best_val_loss = 4.133
+2025-01-29 13:05:13,880 - INFO - 
+Epoch: 120
+2025-01-29 13:05:23,567 - INFO - End of Epoch 120: val_loss = 4.312, val_metric = 0.829, best_val_loss = 4.133
+2025-01-29 13:05:23,568 - INFO - 
+Epoch: 121
+2025-01-29 13:05:33,251 - INFO - End of Epoch 121: val_loss = 4.232, val_metric = 0.844, best_val_loss = 4.133
+2025-01-29 13:05:33,252 - INFO - 
+Epoch: 122
+2025-01-29 13:05:42,938 - INFO - End of Epoch 122: val_loss = 4.274, val_metric = 0.831, best_val_loss = 4.133
+2025-01-29 13:05:42,938 - INFO - 
+Epoch: 123
+2025-01-29 13:05:52,622 - INFO - End of Epoch 123: val_loss = 4.278, val_metric = 0.834, best_val_loss = 4.133
+2025-01-29 13:05:52,622 - INFO - 
+Epoch: 124
+2025-01-29 13:06:02,307 - INFO - End of Epoch 124: val_loss = 4.236, val_metric = 0.839, best_val_loss = 4.133
+2025-01-29 13:06:02,308 - INFO - 
+Epoch: 125
+2025-01-29 13:06:11,993 - INFO - End of Epoch 125: val_loss = 4.215, val_metric = 0.840, best_val_loss = 4.133
+2025-01-29 13:06:11,993 - INFO - 
+Epoch: 126
+2025-01-29 13:06:21,679 - INFO - End of Epoch 126: val_loss = 4.123, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:06:21,679 - INFO - 
+Epoch: 127
+2025-01-29 13:06:31,361 - INFO - End of Epoch 127: val_loss = 4.222, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:06:31,362 - INFO - 
+Epoch: 128
+2025-01-29 13:06:41,048 - INFO - End of Epoch 128: val_loss = 4.239, val_metric = 0.842, best_val_loss = 4.123
+2025-01-29 13:06:41,048 - INFO - 
+Epoch: 129
+2025-01-29 13:06:50,732 - INFO - End of Epoch 129: val_loss = 4.617, val_metric = 0.826, best_val_loss = 4.123
+2025-01-29 13:06:50,732 - INFO - 
+Epoch: 130
+2025-01-29 13:07:00,418 - INFO - End of Epoch 130: val_loss = 4.212, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:07:00,418 - INFO - 
+Epoch: 131
+2025-01-29 13:07:10,103 - INFO - End of Epoch 131: val_loss = 4.505, val_metric = 0.826, best_val_loss = 4.123
+2025-01-29 13:07:10,103 - INFO - 
+Epoch: 132
+2025-01-29 13:07:19,785 - INFO - End of Epoch 132: val_loss = 4.262, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:07:19,785 - INFO - 
+Epoch: 133
+2025-01-29 13:07:29,471 - INFO - End of Epoch 133: val_loss = 4.276, val_metric = 0.840, best_val_loss = 4.123
+2025-01-29 13:07:29,471 - INFO - 
+Epoch: 134
+2025-01-29 13:07:39,157 - INFO - End of Epoch 134: val_loss = 4.423, val_metric = 0.823, best_val_loss = 4.123
+2025-01-29 13:07:39,157 - INFO - 
+Epoch: 135
+2025-01-29 13:07:48,842 - INFO - End of Epoch 135: val_loss = 4.288, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:07:48,842 - INFO - 
+Epoch: 136
+2025-01-29 13:07:58,528 - INFO - End of Epoch 136: val_loss = 4.331, val_metric = 0.829, best_val_loss = 4.123
+2025-01-29 13:07:58,528 - INFO - 
+Epoch: 137
+2025-01-29 13:08:08,214 - INFO - End of Epoch 137: val_loss = 4.246, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:08:08,214 - INFO - 
+Epoch: 138
+2025-01-29 13:08:17,900 - INFO - End of Epoch 138: val_loss = 4.431, val_metric = 0.831, best_val_loss = 4.123
+2025-01-29 13:08:17,900 - INFO - 
+Epoch: 139
+2025-01-29 13:08:27,585 - INFO - End of Epoch 139: val_loss = 4.439, val_metric = 0.830, best_val_loss = 4.123
+2025-01-29 13:08:27,585 - INFO - 
+Epoch: 140
+2025-01-29 13:08:37,269 - INFO - End of Epoch 140: val_loss = 4.156, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:08:37,269 - INFO - 
+Epoch: 141
+2025-01-29 13:08:46,953 - INFO - End of Epoch 141: val_loss = 4.302, val_metric = 0.830, best_val_loss = 4.123
+2025-01-29 13:08:46,953 - INFO - 
+Epoch: 142
+2025-01-29 13:08:56,639 - INFO - End of Epoch 142: val_loss = 4.471, val_metric = 0.826, best_val_loss = 4.123
+2025-01-29 13:08:56,639 - INFO - 
+Epoch: 143
+2025-01-29 13:09:06,323 - INFO - End of Epoch 143: val_loss = 4.304, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:09:06,323 - INFO - 
+Epoch: 144
+2025-01-29 13:09:16,009 - INFO - End of Epoch 144: val_loss = 4.399, val_metric = 0.831, best_val_loss = 4.123
+2025-01-29 13:09:16,009 - INFO - 
+Epoch: 145
+2025-01-29 13:09:25,694 - INFO - End of Epoch 145: val_loss = 4.204, val_metric = 0.840, best_val_loss = 4.123
+2025-01-29 13:09:25,695 - INFO - 
+Epoch: 146
+2025-01-29 13:09:35,381 - INFO - End of Epoch 146: val_loss = 4.322, val_metric = 0.843, best_val_loss = 4.123
+2025-01-29 13:09:35,382 - INFO - 
+Epoch: 147
+2025-01-29 13:09:45,066 - INFO - End of Epoch 147: val_loss = 4.340, val_metric = 0.834, best_val_loss = 4.123
+2025-01-29 13:09:45,066 - INFO - 
+Epoch: 148
+2025-01-29 13:09:54,753 - INFO - End of Epoch 148: val_loss = 4.392, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:09:54,753 - INFO - 
+Epoch: 149
+2025-01-29 13:10:04,438 - INFO - End of Epoch 149: val_loss = 4.320, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:10:04,438 - INFO - 
+Epoch: 150
+2025-01-29 13:10:14,125 - INFO - End of Epoch 150: val_loss = 4.259, val_metric = 0.843, best_val_loss = 4.123
+2025-01-29 13:10:14,125 - INFO - 
+Epoch: 151
+2025-01-29 13:10:23,812 - INFO - End of Epoch 151: val_loss = 4.402, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:10:23,812 - INFO - 
+Epoch: 152
+2025-01-29 13:10:33,500 - INFO - End of Epoch 152: val_loss = 4.335, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:10:33,500 - INFO - 
+Epoch: 153
+2025-01-29 13:10:43,188 - INFO - End of Epoch 153: val_loss = 4.344, val_metric = 0.841, best_val_loss = 4.123
+2025-01-29 13:10:43,188 - INFO - 
+Epoch: 154
+2025-01-29 13:10:52,875 - INFO - End of Epoch 154: val_loss = 4.238, val_metric = 0.840, best_val_loss = 4.123
+2025-01-29 13:10:52,875 - INFO - 
+Epoch: 155
+2025-01-29 13:11:02,561 - INFO - End of Epoch 155: val_loss = 4.339, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:11:02,561 - INFO - 
+Epoch: 156
+2025-01-29 13:11:12,249 - INFO - End of Epoch 156: val_loss = 4.184, val_metric = 0.841, best_val_loss = 4.123
+2025-01-29 13:11:12,250 - INFO - 
+Epoch: 157
+2025-01-29 13:11:21,934 - INFO - End of Epoch 157: val_loss = 4.234, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:11:21,935 - INFO - 
+Epoch: 158
+2025-01-29 13:11:31,623 - INFO - End of Epoch 158: val_loss = 4.286, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:11:31,623 - INFO - 
+Epoch: 159
+2025-01-29 13:11:41,308 - INFO - End of Epoch 159: val_loss = 4.331, val_metric = 0.832, best_val_loss = 4.123
+2025-01-29 13:11:41,308 - INFO - 
+Epoch: 160
+2025-01-29 13:11:50,995 - INFO - End of Epoch 160: val_loss = 4.373, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:11:50,995 - INFO - 
+Epoch: 161
+2025-01-29 13:12:00,682 - INFO - End of Epoch 161: val_loss = 4.317, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:12:00,683 - INFO - 
+Epoch: 162
+2025-01-29 13:12:10,367 - INFO - End of Epoch 162: val_loss = 4.335, val_metric = 0.842, best_val_loss = 4.123
+2025-01-29 13:12:10,367 - INFO - 
+Epoch: 163
+2025-01-29 13:12:20,051 - INFO - End of Epoch 163: val_loss = 4.202, val_metric = 0.842, best_val_loss = 4.123
+2025-01-29 13:12:20,051 - INFO - 
+Epoch: 164
+2025-01-29 13:12:29,737 - INFO - End of Epoch 164: val_loss = 4.272, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:12:29,738 - INFO - 
+Epoch: 165
+2025-01-29 13:12:39,424 - INFO - End of Epoch 165: val_loss = 4.326, val_metric = 0.834, best_val_loss = 4.123
+2025-01-29 13:12:39,425 - INFO - 
+Epoch: 166
+2025-01-29 13:12:49,112 - INFO - End of Epoch 166: val_loss = 4.138, val_metric = 0.843, best_val_loss = 4.123
+2025-01-29 13:12:49,113 - INFO - 
+Epoch: 167
+2025-01-29 13:12:58,798 - INFO - End of Epoch 167: val_loss = 4.223, val_metric = 0.841, best_val_loss = 4.123
+2025-01-29 13:12:58,798 - INFO - 
+Epoch: 168
+2025-01-29 13:13:08,484 - INFO - End of Epoch 168: val_loss = 4.454, val_metric = 0.830, best_val_loss = 4.123
+2025-01-29 13:13:08,484 - INFO - 
+Epoch: 169
+2025-01-29 13:13:18,167 - INFO - End of Epoch 169: val_loss = 4.147, val_metric = 0.842, best_val_loss = 4.123
+2025-01-29 13:13:18,168 - INFO - 
+Epoch: 170
+2025-01-29 13:13:27,852 - INFO - End of Epoch 170: val_loss = 4.126, val_metric = 0.841, best_val_loss = 4.123
+2025-01-29 13:13:27,853 - INFO - 
+Epoch: 171
+2025-01-29 13:13:37,536 - INFO - End of Epoch 171: val_loss = 4.434, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:13:37,536 - INFO - 
+Epoch: 172
+2025-01-29 13:13:47,221 - INFO - End of Epoch 172: val_loss = 4.352, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:13:47,222 - INFO - 
+Epoch: 173
+2025-01-29 13:13:56,905 - INFO - End of Epoch 173: val_loss = 4.443, val_metric = 0.834, best_val_loss = 4.123
+2025-01-29 13:13:56,905 - INFO - 
+Epoch: 174
+2025-01-29 13:14:06,593 - INFO - End of Epoch 174: val_loss = 4.452, val_metric = 0.832, best_val_loss = 4.123
+2025-01-29 13:14:06,593 - INFO - 
+Epoch: 175
+2025-01-29 13:14:16,278 - INFO - End of Epoch 175: val_loss = 4.496, val_metric = 0.832, best_val_loss = 4.123
+2025-01-29 13:14:16,278 - INFO - 
+Epoch: 176
+2025-01-29 13:14:25,962 - INFO - End of Epoch 176: val_loss = 4.436, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:14:25,962 - INFO - 
+Epoch: 177
+2025-01-29 13:14:35,649 - INFO - End of Epoch 177: val_loss = 4.209, val_metric = 0.842, best_val_loss = 4.123
+2025-01-29 13:14:35,649 - INFO - 
+Epoch: 178
+2025-01-29 13:14:45,335 - INFO - End of Epoch 178: val_loss = 4.330, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:14:45,335 - INFO - 
+Epoch: 179
+2025-01-29 13:14:55,019 - INFO - End of Epoch 179: val_loss = 4.256, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:14:55,020 - INFO - 
+Epoch: 180
+2025-01-29 13:15:04,705 - INFO - End of Epoch 180: val_loss = 4.189, val_metric = 0.840, best_val_loss = 4.123
+2025-01-29 13:15:04,705 - INFO - 
+Epoch: 181
+2025-01-29 13:15:14,389 - INFO - End of Epoch 181: val_loss = 4.225, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:15:14,390 - INFO - 
+Epoch: 182
+2025-01-29 13:15:24,071 - INFO - End of Epoch 182: val_loss = 4.224, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:15:24,072 - INFO - 
+Epoch: 183
+2025-01-29 13:15:33,752 - INFO - End of Epoch 183: val_loss = 4.218, val_metric = 0.843, best_val_loss = 4.123
+2025-01-29 13:15:33,752 - INFO - 
+Epoch: 184
+2025-01-29 13:15:43,436 - INFO - End of Epoch 184: val_loss = 4.275, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:15:43,437 - INFO - 
+Epoch: 185
+2025-01-29 13:15:53,118 - INFO - End of Epoch 185: val_loss = 4.198, val_metric = 0.843, best_val_loss = 4.123
+2025-01-29 13:15:53,118 - INFO - 
+Epoch: 186
+2025-01-29 13:16:02,800 - INFO - End of Epoch 186: val_loss = 4.228, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:16:02,801 - INFO - 
+Epoch: 187
+2025-01-29 13:16:12,483 - INFO - End of Epoch 187: val_loss = 4.445, val_metric = 0.832, best_val_loss = 4.123
+2025-01-29 13:16:12,483 - INFO - 
+Epoch: 188
+2025-01-29 13:16:22,167 - INFO - End of Epoch 188: val_loss = 4.345, val_metric = 0.834, best_val_loss = 4.123
+2025-01-29 13:16:22,168 - INFO - 
+Epoch: 189
+2025-01-29 13:16:31,855 - INFO - End of Epoch 189: val_loss = 4.273, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:16:31,856 - INFO - 
+Epoch: 190
+2025-01-29 13:16:41,541 - INFO - End of Epoch 190: val_loss = 4.395, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:16:41,541 - INFO - 
+Epoch: 191
+2025-01-29 13:16:51,223 - INFO - End of Epoch 191: val_loss = 4.241, val_metric = 0.840, best_val_loss = 4.123
+2025-01-29 13:16:51,224 - INFO - 
+Epoch: 192
+2025-01-29 13:17:00,905 - INFO - End of Epoch 192: val_loss = 4.253, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:17:00,905 - INFO - 
+Epoch: 193
+2025-01-29 13:17:10,586 - INFO - End of Epoch 193: val_loss = 4.245, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:17:10,586 - INFO - 
+Epoch: 194
+2025-01-29 13:17:20,267 - INFO - End of Epoch 194: val_loss = 4.313, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:17:20,267 - INFO - 
+Epoch: 195
+2025-01-29 13:17:29,950 - INFO - End of Epoch 195: val_loss = 4.158, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:17:29,950 - INFO - 
+Epoch: 196
+2025-01-29 13:17:39,633 - INFO - End of Epoch 196: val_loss = 4.509, val_metric = 0.827, best_val_loss = 4.123
+2025-01-29 13:17:39,633 - INFO - 
+Epoch: 197
+2025-01-29 13:17:49,315 - INFO - End of Epoch 197: val_loss = 4.234, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:17:49,315 - INFO - 
+Epoch: 198
+2025-01-29 13:17:59,000 - INFO - End of Epoch 198: val_loss = 4.265, val_metric = 0.833, best_val_loss = 4.123
+2025-01-29 13:17:59,001 - INFO - 
+Epoch: 199
+2025-01-29 13:18:08,686 - INFO - End of Epoch 199: val_loss = 4.374, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:18:08,686 - INFO - 
+Epoch: 200
+2025-01-29 13:18:18,368 - INFO - End of Epoch 200: val_loss = 4.188, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:18:18,368 - INFO - 
+Epoch: 201
+2025-01-29 13:18:28,050 - INFO - End of Epoch 201: val_loss = 4.376, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:18:28,051 - INFO - 
+Epoch: 202
+2025-01-29 13:18:37,731 - INFO - End of Epoch 202: val_loss = 4.209, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:18:37,731 - INFO - 
+Epoch: 203
+2025-01-29 13:18:47,412 - INFO - End of Epoch 203: val_loss = 4.188, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:18:47,413 - INFO - 
+Epoch: 204
+2025-01-29 13:18:57,094 - INFO - End of Epoch 204: val_loss = 4.291, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:18:57,094 - INFO - 
+Epoch: 205
+2025-01-29 13:19:06,780 - INFO - End of Epoch 205: val_loss = 4.421, val_metric = 0.828, best_val_loss = 4.123
+2025-01-29 13:19:06,781 - INFO - 
+Epoch: 206
+2025-01-29 13:19:16,466 - INFO - End of Epoch 206: val_loss = 4.403, val_metric = 0.830, best_val_loss = 4.123
+2025-01-29 13:19:16,467 - INFO - 
+Epoch: 207
+2025-01-29 13:19:26,151 - INFO - End of Epoch 207: val_loss = 4.315, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:19:26,151 - INFO - 
+Epoch: 208
+2025-01-29 13:19:35,836 - INFO - End of Epoch 208: val_loss = 4.330, val_metric = 0.835, best_val_loss = 4.123
+2025-01-29 13:19:35,836 - INFO - 
+Epoch: 209
+2025-01-29 13:19:45,521 - INFO - End of Epoch 209: val_loss = 4.254, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:19:45,521 - INFO - 
+Epoch: 210
+2025-01-29 13:19:55,207 - INFO - End of Epoch 210: val_loss = 4.151, val_metric = 0.843, best_val_loss = 4.123
+2025-01-29 13:19:55,207 - INFO - 
+Epoch: 211
+2025-01-29 13:20:04,893 - INFO - End of Epoch 211: val_loss = 4.440, val_metric = 0.834, best_val_loss = 4.123
+2025-01-29 13:20:04,893 - INFO - 
+Epoch: 212
+2025-01-29 13:20:14,578 - INFO - End of Epoch 212: val_loss = 4.331, val_metric = 0.832, best_val_loss = 4.123
+2025-01-29 13:20:14,578 - INFO - 
+Epoch: 213
+2025-01-29 13:20:24,262 - INFO - End of Epoch 213: val_loss = 4.298, val_metric = 0.832, best_val_loss = 4.123
+2025-01-29 13:20:24,262 - INFO - 
+Epoch: 214
+2025-01-29 13:20:33,944 - INFO - End of Epoch 214: val_loss = 4.319, val_metric = 0.832, best_val_loss = 4.123
+2025-01-29 13:20:33,944 - INFO - 
+Epoch: 215
+2025-01-29 13:20:43,634 - INFO - End of Epoch 215: val_loss = 4.246, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:20:43,634 - INFO - 
+Epoch: 216
+2025-01-29 13:20:53,319 - INFO - End of Epoch 216: val_loss = 4.191, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:20:53,319 - INFO - 
+Epoch: 217
+2025-01-29 13:21:03,004 - INFO - End of Epoch 217: val_loss = 4.272, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:21:03,005 - INFO - 
+Epoch: 218
+2025-01-29 13:21:12,687 - INFO - End of Epoch 218: val_loss = 4.233, val_metric = 0.839, best_val_loss = 4.123
+2025-01-29 13:21:12,688 - INFO - 
+Epoch: 219
+2025-01-29 13:21:22,370 - INFO - End of Epoch 219: val_loss = 4.266, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:21:22,371 - INFO - 
+Epoch: 220
+2025-01-29 13:21:32,055 - INFO - End of Epoch 220: val_loss = 4.275, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:21:32,056 - INFO - 
+Epoch: 221
+2025-01-29 13:21:41,741 - INFO - End of Epoch 221: val_loss = 4.344, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:21:41,741 - INFO - 
+Epoch: 222
+2025-01-29 13:21:51,424 - INFO - End of Epoch 222: val_loss = 4.297, val_metric = 0.836, best_val_loss = 4.123
+2025-01-29 13:21:51,425 - INFO - 
+Epoch: 223
+2025-01-29 13:22:01,107 - INFO - End of Epoch 223: val_loss = 4.266, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:22:01,108 - INFO - 
+Epoch: 224
+2025-01-29 13:22:10,793 - INFO - End of Epoch 224: val_loss = 4.306, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:22:10,794 - INFO - 
+Epoch: 225
+2025-01-29 13:22:20,478 - INFO - End of Epoch 225: val_loss = 4.225, val_metric = 0.838, best_val_loss = 4.123
+2025-01-29 13:22:20,478 - INFO - 
+Epoch: 226
+2025-01-29 13:22:30,163 - INFO - End of Epoch 226: val_loss = 4.229, val_metric = 0.837, best_val_loss = 4.123
+2025-01-29 13:22:30,163 - INFO - Early stopping triggered after 227 epochs. No improvement for 100 consecutive epochs.
+2025-01-29 13:22:30,198 - INFO - 
+Training finished!
+2025-01-29 13:22:30,972 - INFO - 
+Test R^2:  0.8708
+2025-01-29 13:22:30,972 - INFO - Test MSE:  44.9305
+2025-01-29 13:22:30,972 - INFO - Test MAE:  3.9355
+2025-01-29 13:22:38,621 - INFO - Model saved to /projects/p32082/PSED_CNN_old/model/My3DCNN_Kr_cm3_per_cm3_value_property_state_dict.pt
+2025-01-29 13:22:39,589 - INFO - Saved parity plot to /projects/p32082/PSED_CNN_old/image/parity_property_My3DCNN_Kr_cm3_per_cm3_value.png
+/projects/p32082/PSED_CNN_old/data/train 12355
+/projects/p32082/PSED_CNN_old/data/test 1373

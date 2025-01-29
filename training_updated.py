@@ -30,13 +30,13 @@ hyper_params = {'batch_size':64, 'num_epochs':300, 'eval_freq':40,
 
 
 # load_dir = '/data/yll6162/data/'
-load_dir = '/data/yll6162/mof_cnn/data_mix_13k'
-model_save_dir = '/data/yll6162/mof_cnn/model'
+load_dir = '/projects/p32082/PSED_CNN_old/data'
+model_save_dir = '/projects/p32082/PSED_CNN_old/model'
 # target_col = 'Xe_cm3_per_cm3_value'
 target_col = 'Kr_cm3_per_cm3_value'
 # target_col = 'Xe_mol_per_kg_value'
 # target_col = 'Kr_mol_per_kg_value'
-model_name = f'Mix1bar_{target_col}_no_64'
+model_name = f'Mix10bar_{target_col}_no_64'
 model_name = f"{model_name}_{hyper_params['batch_size']}_{hyper_params['learning_rate']}_{hyper_params['weight_decay']}_{hyper_params['step_size']}_{hyper_params['gamma']}_{hyper_params['optimizer']}"
 
 def setup_logger(log_dir="./log", log_filename=None):
@@ -89,7 +89,7 @@ standardization = transforms.Normalize(X_train.mean(), X_train.std())
 
 augmentation = transforms.Compose([
     standardization,
-    transforms.RandomChoice([Reflect(), Identity()]),
+    transforms.RandomChoice([Identity()]),
     # transforms.RandomChoice([Rotate90(), Flip(), Reflect(), Identity()]),
 ])
 
@@ -207,8 +207,10 @@ plt.title('Parity Plot')
 plt.grid(True)
 
 # Save the plot as a PNG file
-plt.savefig(f'./pred/parity_{model_name}.png')
-
+# plt.savefig(f'./pred/parity_{model_name}.png')
+output_dir = '/projects/p32082/PSED_CNN_old/image'
+os.makedirs(output_dir, exist_ok=True)
+plt.savefig(os.path.join(output_dir, f'parity_{model_name}.png'))
 
 
 # plt.show()
