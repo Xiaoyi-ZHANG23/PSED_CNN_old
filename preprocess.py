@@ -2,29 +2,40 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+import os
+from sklearn.model_selection import train_test_split
+import json
 
 # df_iso1 = pd.read_csv('/data/yll6162/mof_cnn/PSED_data/extracted_cm3_per_cm3_values_part1.csv')
 # df_iso2 = pd.read_csv('/data/yll6162/mof_cnn/PSED_data/extracted_cm3_per_cm3_values_part2.csv')
 # df_iso3 = pd.read_csv('/data/yll6162/mof_cnn/PSED_data/extracted_cm3_per_cm3_values_part3.csv')
-target_col = 'Kr_cm3_per_cm3_value'
-output_dir = '/projects/p32082/PSED_CNN_old/data'
-# os.makedirs(output_dir, exist_ok=True)
+pressure = '0.25bar'
+pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
+pressure_str = pressure_map[pressure]
+grid_type = '' #empty for original grid, or translated or rotated
+# ref_data_split = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}'
+ref_data_split = None
+target_col1 = 'Xe_cm3_per_cm3_value'
+target_col2 = 'Kr_cm3_per_cm3_value'
+output_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}_{grid_type}'.rstrip('_')
+input_csv = '/data/yll6162/mof_cnn/PSED_data/combined_data_by_pressure_volume.xlsx'
+os.makedirs(output_dir, exist_ok=True)
 # df_iso1 = pd.read_csv('/data/yll6162/mof_cnn/PSED_data/converted_10bar_5k.csv')
 # df_iso2 = pd.read_csv('/data/yll6162/mof_cnn/PSED_data/converted_10bar_qmof.csv')
 # df_iso3 = 
-df_iso = pd.read_csv('/projects/p32082/PSED_CNN_old/data/10bar_col_with_property.csv')
+df_iso = pd.read_excel(input_csv, sheet_name=pressure)
 df_iso['database'] = df_iso['project'].apply(lambda x: 'qmof' if x.startswith('qmof') else 'ToBaCCo')
-df_iso = df_iso[~df_iso[target_col].isna()] # exclude NAN values
+df_iso = df_iso[~df_iso[target_col1].isna()] 
+df_iso = df_iso[~df_iso[target_col2].isna()] # exclude NAN values
 df_iso.to_csv(f'{output_dir}/all.csv', index=False)
-df_iso
-import os
+
 
 # Define the top-level directory
-base_dir = "/projects/p32082/PSED_CNN_old/data/New_Parsed/" ## REPLACE WITH YOUR DIRECTORY
+base_dir = "/data/yll6162/mof_cnn/PSED_data/New_Parsed_new_new/New_Parsed/" ## REPLACE WITH YOUR DIRECTORY
 
 # Define the relative subdirectory and file names to check
 subdir = "ASCI_Grids"
-file_names = ["energy_grid.txt"]
+file_names = [f"{grid_type}_energy_grid.txt".lstrip('_')]
 abnormal_files = []
 empty_files = []
 absent_files = []
@@ -71,10 +82,10 @@ for folder in os.listdir(base_dir):
         else:
             print(f"ASCI_Grids subdirectory does not exist in folder: {folder}")
 
-print(f"Absent energy_grid.txt files: {len(absent_files)}")
-print(f"Empty energy_grid.txt files: {len(empty_files)}")
-print(f"Abnormal energy_grid.txt files: {len(abnormal_files)}")
-print(f"Normal energy_grid.txt files: {len(normal_files)}")
+print(f"Absent {grid_type} energy_grid.txt files: {len(absent_files)}")
+print(f"Empty {grid_type} energy_grid.txt files: {len(empty_files)}")
+print(f"Abnormal {grid_type} energy_grid.txt files: {len(abnormal_files)}")
+print(f"Normal {grid_type} energy_grid.txt files: {len(normal_files)}")
 #Filter by isotherm values
 filterd_mofs = []
 unmatched_mofs = []
@@ -83,21 +94,33 @@ for mof_file in normal_files:
         filterd_mofs.append(mof_file)
 print(f"Filtered mofs: {len(filterd_mofs)}")
 print(f"Unmatched mofs: {len(normal_files) - len(filterd_mofs)}")
-from sklearn.model_selection import train_test_split
-import json
-test_size = 0.1
 
-train_files, test_files = train_test_split(filterd_mofs, test_size=0.1, random_state=42)
-print(f"Training files: {len(train_files)}")
-print(f"Testing files: {len(test_files)}")
 
-datset_mof = {'train': train_files, 'test': test_files}
+datset_mof = {}
+if ref_data_split and os.path.exists(ref_data_split):
+    print(f"using reference dataset split from {ref_data_split}")
+    for split in ['train', 'test', 'val']:
+        with open(f'{ref_data_split}/{split}/clean.json', 'r') as f:
+            ref_data = json.load(f)
+            subset_files = [sample for sample in ref_data['name'] if sample in filterd_mofs]
+            datset_mof[split] = subset_files
+            print(f"Loaded {split} files: {len(subset_files)} from original reference dataset split {len(ref_data['name'])}")
+else:
+    print("No reference dataset split found. Splitting data randomly.")
+    test_size = 0.1
+    val_size = 0.1
+    train_files, test_files = train_test_split(filterd_mofs, test_size=test_size, random_state=42)
+    train_files, val_files = train_test_split(train_files, test_size=val_size/(1-test_size), random_state=42)
+    print(f"Training files: {len(train_files)}")
+    print(f"Validation files: {len(val_files)}")
+    print(f"Testing files: {len(test_files)}")
+    datset_mof = {'train': train_files, 'test': test_files, 'val': val_files}
 
 grid = 41
 
-for subset in ['train', 'test']:
+for subset in ['train', 'test', 'val']:
     dir_path = os.path.join(output_dir, subset)
-    os.makedirs(dir_path, exist_ok=True)
+    os.makedirs(dir_path, exist_ok=False)
     subset_data = {}
     subset_data['name'] = datset_mof[subset]
     subset_data['grid'] = grid
@@ -107,16 +130,16 @@ for subset in ['train', 'test']:
     print(f"saved {subset} data to {dir_path}/clean.json")
     
 pos_cap = 0
-source_dir = "/projects/p32082/PSED_CNN_old/data/New_Parsed/"
-grid = 41
-data_splits = [train_files, test_files]
 
-for subset in ['train', 'test']:
+grid = 41
+
+
+for subset in ['train', 'test', 'val']:
     array_list = []
     dir_path = os.path.join(output_dir, subset)
-    os.makedirs(dir_path, exist_ok=True)
+    grid_file = f"{grid_type}_energy_grid.txt".lstrip('_')
     for mof_file in datset_mof[subset]:
-        with open(f"{source_dir}/{mof_file}/ASCI_Grids/energy_grid.txt", "r") as file:
+        with open(f"{base_dir}/{mof_file}/ASCI_Grids/{grid_file}", "r") as file:
             lines = file.readlines()  # Each line is stored as an element in the list
         # Step 1: Convert list to NumPy array
         data_array = np.array(lines, dtype=object)
