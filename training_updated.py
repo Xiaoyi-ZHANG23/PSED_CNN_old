@@ -22,7 +22,9 @@ SEED = 1
 np.random.seed(SEED)
 torch.manual_seed(SEED)
 random.seed(SEED)
-
+pressure = '0.25bar'
+pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
+pressure_str = pressure_map[pressure]
 # eval_freq: evaluate val loos and check early stopping every k batches
 hyper_params = {'batch_size':64, 'num_epochs':300, 'eval_freq':40,
                 'learning_rate':1e-4, 'weight_decay':1e-4, 'step_size':60, 'gamma':0.5,
@@ -30,13 +32,14 @@ hyper_params = {'batch_size':64, 'num_epochs':300, 'eval_freq':40,
 
 
 # load_dir = '/data/yll6162/data/'
-load_dir = '/projects/p32082/PSED_CNN_old/data'
-model_save_dir = '/projects/p32082/PSED_CNN_old/model'
+grid_type = '' #empty for original grid, or translated or rotated
+load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}_{grid_type}'.rstrip('_')
+model_save_dir = '/data/yll6162/mof_cnn/model'
+output_dir = './pred'
 # target_col = 'Xe_cm3_per_cm3_value'
 target_col = 'Kr_cm3_per_cm3_value'
-# target_col = 'Xe_mol_per_kg_value'
-# target_col = 'Kr_mol_per_kg_value'
-model_name = f'Mix10bar_{target_col}_no_64'
+
+model_name = f'Mix{pressure_str}_{target_col}_{grid_type}_no_64'
 model_name = f"{model_name}_{hyper_params['batch_size']}_{hyper_params['learning_rate']}_{hyper_params['weight_decay']}_{hyper_params['step_size']}_{hyper_params['gamma']}_{hyper_params['optimizer']}"
 
 def setup_logger(log_dir="./log", log_filename=None):
@@ -70,7 +73,13 @@ X_train, y_train = load_data(
     'project',
 )
 
-
+# Load val data.
+X_val, y_val = load_data(
+    f'{load_dir}/val',
+    f'{load_dir}/all.csv',
+    target_col,
+    'project',
+)
 
 # Load test data.
 X_test, y_test = load_data(
@@ -81,29 +90,33 @@ X_test, y_test = load_data(
 )
 assert np.isnan(X_train).sum()==0
 assert np.isnan(y_train).sum()==0
+assert np.isnan(X_val).sum()==0
+assert np.isnan(y_val).sum()==0
 assert np.isnan(X_test).sum()==0
 assert np.isnan(y_test).sum()==0
 
 # Transformations for standardization + data augmentation.
-standardization = transforms.Normalize(X_train.mean(), X_train.std())
+standardization_train = transforms.Normalize(X_train.mean(), X_train.std())
+standardization_val = transforms.Normalize(X_val.mean(), X_val.std())
+standardization_test = transforms.Normalize(X_test.mean(), X_test.std())
 
-augmentation = transforms.Compose([
-    standardization,
-    transforms.RandomChoice([Identity()]),
-    # transforms.RandomChoice([Rotate90(), Flip(), Reflect(), Identity()]),
-])
+# augmentation = transforms.Compose([
+#     standardization,
+#     transforms.RandomChoice([Identity()]),
+#     # transforms.RandomChoice([Rotate90(), Flip(), Reflect(), Identity()]),
+# ])
 
 # Adding a channel dimension required for CNN.
-X_train, X_test = [X.reshape(X.shape[0], 1, *X.shape[1:]) for X in [X_train, X_test]]
+X_train, X_val, X_test = [X.reshape(X.shape[0], 1, *X.shape[1:]) for X in [X_train, X_val, X_test]]
 
 # Split the training data into training and validation sets.
-train_size = 8/9
-val_size = 1 - train_size
-X_train, X_val, y_train, y_val = train_test_split(
-    X_train, y_train,
-    test_size = val_size,
-    random_state=SEED
-)
+# train_size = 8/9
+# val_size = 1 - train_size
+# X_train, X_val, y_train, y_val = train_test_split(
+#     X_train, y_train,
+#     test_size = val_size,
+#     random_state=SEED
+# )
 logger.info(X_train.shape)
 logger.info(y_train.shape)
 
@@ -113,20 +126,20 @@ logger.info(y_val.shape)
 logger.info(X_test.shape)
 logger.info(y_test.shape)
 
-print(X_train[0])
+
 # Create the dataloaders.
 train_loader = DataLoader(
-    CustomDataset(X=X_train, y=y_train, transform_X=standardization),
-    batch_size=hyper_params['batch_size'], shuffle=True, pin_memory=True,
+    CustomDataset(X=X_train, y=y_train, transform_X=standardization_train),
+    batch_size=hyper_params['batch_size'], shuffle=True, pin_memory=True, drop_last=True,
 )
 
 val_loader = DataLoader(
-    CustomDataset(X=X_val, y=y_val, transform_X=standardization),
-    batch_size=2 * hyper_params['batch_size'], shuffle=True, pin_memory=True,
+    CustomDataset(X=X_val, y=y_val, transform_X=standardization_val),
+    batch_size=2 * hyper_params['batch_size'], shuffle=True, pin_memory=True, 
 )
 
 test_loader = DataLoader(
-    CustomDataset(X=X_test, y=y_test, transform_X=standardization),
+    CustomDataset(X=X_test, y=y_test, transform_X=standardization_test), 
     batch_size=2 * hyper_params['batch_size'], pin_memory=True,
 )
 
@@ -208,7 +221,7 @@ plt.grid(True)
 
 # Save the plot as a PNG file
 # plt.savefig(f'./pred/parity_{model_name}.png')
-output_dir = '/projects/p32082/PSED_CNN_old/image'
+
 os.makedirs(output_dir, exist_ok=True)
 plt.savefig(os.path.join(output_dir, f'parity_{model_name}.png'))
 
