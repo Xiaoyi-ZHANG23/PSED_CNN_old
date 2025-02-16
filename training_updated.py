@@ -14,38 +14,56 @@ from sklearn.model_selection import train_test_split
 import os
 from datetime import datetime
 import logging
+import pandas as pd
 
 # For reproducible results.
 # See also -> https://pytorch.org/docs/stable/notes/randomness.html
 
 SEED = 1
-np.random.seed(SEED)
-torch.manual_seed(SEED)
-random.seed(SEED)
-pressure = '0.25bar'
+
+os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.use_deterministic_algorithms(True, warn_only=True)
+
+set_seed(SEED)
+id_col = 'project'
+pressure = '1bar'
 pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
 pressure_str = pressure_map[pressure]
 # eval_freq: evaluate val loos and check early stopping every k batches
-hyper_params = {'batch_size':64, 'num_epochs':300, 'eval_freq':40,
+hyper_params = {'batch_size':64, 'num_epochs':1000, 'eval_freq':40,
                 'learning_rate':1e-4, 'weight_decay':1e-4, 'step_size':60, 'gamma':0.5,
                  'optimizer':'Adam', 'patience':100}
 
 
 # load_dir = '/data/yll6162/data/'
-grid_type = '' #empty for original grid, or translated or rotated
-load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}_{grid_type}'.rstrip('_')
+grid_type = 'center' #empty for original grid, or translated or rotated
+num_grids = 1
+# load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}_{grid_type}'.rstrip('_')
+# load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}_{num_grids}_grids'
+load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}'
+
 model_save_dir = '/data/yll6162/mof_cnn/model'
 output_dir = './pred'
-# target_col = 'Xe_cm3_per_cm3_value'
-target_col = 'Kr_cm3_per_cm3_value'
-
-model_name = f'Mix{pressure_str}_{target_col}_{grid_type}_no_64'
+target_col = 'Xe_cm3_per_cm3_value'
+# target_col = 'Kr_cm3_per_cm3_value'
+# target_col = 'Xe_selectivity'
+timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M')
+model_name = f'Mix{pressure_str}_{num_grids}_grids_{grid_type}_{target_col}_no_64_{timestamp}'
 model_name = f"{model_name}_{hyper_params['batch_size']}_{hyper_params['learning_rate']}_{hyper_params['weight_decay']}_{hyper_params['step_size']}_{hyper_params['gamma']}_{hyper_params['optimizer']}"
+
 
 def setup_logger(log_dir="./log", log_filename=None):
     os.makedirs(log_dir, exist_ok=True)
     if log_filename is None:
-        log_filename = f"{model_name}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.log"
+        log_filename = f"{model_name}_{timestamp}.log"
     log_file = os.path.join(log_dir, log_filename)
     logging.basicConfig(
         level=logging.INFO,
@@ -70,7 +88,7 @@ X_train, y_train = load_data(
     f'{load_dir}/train',
     f'{load_dir}/all.csv',
     target_col,
-    'project',
+    id_col,
 )
 
 # Load val data.
@@ -78,7 +96,7 @@ X_val, y_val = load_data(
     f'{load_dir}/val',
     f'{load_dir}/all.csv',
     target_col,
-    'project',
+    id_col,
 )
 
 # Load test data.
@@ -86,7 +104,7 @@ X_test, y_test = load_data(
     f'{load_dir}/test',
     f'{load_dir}/all.csv',
     target_col,
-    'project',
+    id_col,
 )
 assert np.isnan(X_train).sum()==0
 assert np.isnan(y_train).sum()==0
@@ -209,6 +227,9 @@ logger.info(f'R^2: {r2}')
 logger.info(f'MSE: {mse}')
 logger.info(f'MAE: {mae}')
 
+df_pred = pd.DataFrame({f'{target_col}_true': y_true.flatten(), f'{target_col}_pred': y_pred.flatten()})
+df_pred.to_csv(f'{output_dir}/pred_{model_name}_{timestamp}.csv', index=False)
+
 
 # Plot Parity Plot
 plt.figure(figsize=(8, 8))
@@ -223,7 +244,7 @@ plt.grid(True)
 # plt.savefig(f'./pred/parity_{model_name}.png')
 
 os.makedirs(output_dir, exist_ok=True)
-plt.savefig(os.path.join(output_dir, f'parity_{model_name}.png'))
+plt.savefig(os.path.join(output_dir, f'parity_{model_name}_{timestamp}.png'))
 
 
 # plt.show()
