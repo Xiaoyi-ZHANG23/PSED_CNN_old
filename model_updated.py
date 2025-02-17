@@ -319,3 +319,17 @@ def load_data(dir_batch, path_to_csv, target_name, index_col, size=None):
         return X, y
     else:
         return X[:size], y[:size]
+
+def load_data_id(dir_batch, path_to_csv, target_name, index_col, size=None):
+    with open(f'{dir_batch}/clean.json', 'r') as fhand:
+        names = json.load(fhand)['name']
+    print(dir_batch, len(names))
+    df = pd.read_csv(path_to_csv, index_col=index_col)
+
+    y = df.loc[names, target_name].values
+    X = np.load(f'{dir_batch}/clean.npy', mmap_mode='r')
+    ids = names
+    if size is None:
+        return X, y, ids
+    else:
+        return X[:size], y[:size], ids[:size]
