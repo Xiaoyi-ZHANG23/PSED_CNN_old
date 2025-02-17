@@ -146,8 +146,7 @@ def model_predict(model_dir, model_name, target_col, id_col):
     y_true = y_true.reshape(-1)
     test_rst = {id_col: ids_test,f'{target_col}': y_true, f'{target_col}_pred': y_pred}
     df_test = pd.DataFrame.from_dict(test_rst)
-    return df_test
-    # df_test.to_csv(f'./pred/{model_name}_pred.csv', index=False)
+    # df_test.to_csv(f'./pred/{model_name}_test.csv', index=False)
 
     # plt.figure(figsize=(8, 8))
     # plt.scatter(y_true, y_pred, alpha=0.5)
@@ -159,69 +158,92 @@ def model_predict(model_dir, model_name, target_col, id_col):
 
 
 
-
-def derive_pred_multi_grid(df_pred, col):
-
-    df_pred['mof'] = df_pred['sample'].apply(lambda x: x.split('--')[0])
-    df_pred['grid_type'] = df_pred['sample'].apply(lambda x: x.split('--')[1])
-    df_pred_mof = df_pred.groupby('mof').agg(
-        true_value=(f'{col}','first'),
-        pred_value_agg=(f'{col}_pred','median')
-    ).reset_index()
+    # # Save the plot as a PNG file
+    # plt.savefig(f'./pred/parity_{model_name}.png')
+    return df_test
 
 
-    y_pred = df_pred_mof['pred_value_agg'].values
-    y_true = df_pred_mof['true_value'].values
-    # Calculate R^2 and MSE
-    r2 = r2_score(torch.tensor(y_pred), torch.tensor(y_true)).item()
-    mse = mean_squared_error(y_true, y_pred)
-    mae = mean_absolute_error(y_true, y_pred)
 
-    print(f'Aggreated pred R^2: {r2}')
-    print(f'Aggreated pred MSE: {mse}')
-    print(f'Aggreated pred MAE: {mae}')
 
-    y_pred = y_pred.reshape(-1)
-    y_true = y_true.reshape(-1)
-    # test_rst = {id_col: ids_test,f'{target_col}': y_true, f'{target_col}_pred': y_pred}
-    # df_test = pd.DataFrame.from_dict(test_rst)
-    # df_test.to_csv(f'./pred/{model_name}_pred.csv', index=False)
-    df_pred_mof.to_csv(f'./pred/grid_data_aug_{model_name}_pred.csv', index=False)
 
-    plt.figure(figsize=(8, 8))
-    plt.scatter(y_true, y_pred, alpha=0.5, color='orange')
-    plt.plot([y_true.min(), y_true.max()], [y_true.min(), y_true.max()], 'r--', lw=2)
-    plt.xlabel('True Values')
-    plt.ylabel('Predicted Values')
-    plt.title('Parity Plot')
-    plt.grid(True)
-    plt.savefig(f'./pred/grid_data_aug_{model_name}_pred_parity.png')
-
-# model_name = 'Mix1bar_3_grids_all_Xe_cm3_per_cm3_value_no_64_64_0.0001_0.0001_60_0.5_Adam'
-# model_name = 'Mix1bar_Xe_cm3_per_cm3_value_no_64_64_0.0001_0.0001_60_0.5_Adam'
-model_name = 'Mix1bar_3_grids_all_Xe_cm3_per_cm3_value_no_64_64_0.0001_0.0001_60_0.5_Adam'
+Kr_model_name = 'Mix1bar_1_grids_center_Kr_cm3_per_cm3_value_no_64_2025-02-16_21-13_64_0.0001_0.0001_60_0.5_Adam'
+Xe_model_name = 'Mix1bar_1_grids_center_Xe_cm3_per_cm3_value_no_64_2025-02-16_15-40_64_0.0001_0.0001_60_0.5_Adam'
 
 model_dir = '/data/yll6162/mof_cnn/model'
-num_grids = 3
-pressure = '1bar'
-# load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure}_{num_grids}_grids'
-load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure}_{num_grids}_grids'
-col = 'Xe_cm3_per_cm3_value'
 
-id_col = 'sample'
+pressure = '1bar'
+load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure}'
+Xe_col = 'Xe_cm3_per_cm3_value'
+Kr_col = 'Kr_cm3_per_cm3_value'
+id_col = 'project'
+output_dir = './pred'
 # Define the device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-df_pred = model_predict(model_dir, model_name, col, id_col)
+df_kr = model_predict(model_dir, Kr_model_name, Kr_col, id_col)
+df_xe = model_predict(model_dir, Xe_model_name, Xe_col, id_col)
+
+print(df_kr.shape)
+print(df_xe.shape)
+
+df_all = df_kr.merge(df_xe, on=id_col, how='inner')
+print(df_all.shape)
 
 
-if num_grids > 1:
-    derive_pred_multi_grid(df_pred, col)
+df_all['Xe_selectivity'] = (df_all['Xe_cm3_per_cm3_value']/0.2) / (df_all['Kr_cm3_per_cm3_value']/0.8)
+df_all.loc[(df_all['Xe_cm3_per_cm3_value'] == 0) & (df_all['Kr_cm3_per_cm3_value'] == 0), 'Xe_selectivity'] = 0
+
+df_all['Xe_selectivity_pred'] = (df_all[f'{Xe_col}_pred']/0.2) / (df_all[f'{Kr_col}_pred']/0.8)
+df_all.loc[(df_all[f'{Xe_col}_pred'] == 0) & (df_all[f'{Kr_col}_pred'] == 0), 'Xe_selectivity_pred'] = 0
+
+
+
+
+sel_pred = df_all['Xe_selectivity_pred']
+sel_true = df_all['Xe_selectivity']
+# Calculate R^2 and MSE
+print(sel_true.shape)
+print(sel_pred.shape)
+r2 = r2_score(torch.tensor(sel_pred), torch.tensor(sel_true)).item()
+mse = mean_squared_error(sel_true, sel_pred)
+mae = mean_absolute_error(sel_true, sel_pred)
+
+print(f'derived Xe selectivity R^2: {r2}')
+print(f'derived Xe selectivity MSE: {mse}')
+print(f'derived Xe selectivity MAE: {mae}')
+
+
+plt.figure(figsize=(8, 8))
+plt.scatter(sel_true, sel_pred, alpha=0.5, color = 'purple')
+plt.plot([sel_true.min(), sel_true.max()], [sel_true.min(), sel_true.max()], 'r--', lw=2)
+plt.xlabel('True Values')
+plt.ylabel('Derived Xe Selectivity Values from Predicted Kr and Xe')
+plt.title('Parity Plot')
+plt.grid(True)
+
+plt.savefig(os.path.join(output_dir, f'derived_Xe_sel_{Kr_model_name}_{Xe_model_name}.png'))
 
 
 
 
 
+sel_pred = df_all['Xe_selectivity_pred'].values
+sel_true = df_all['Xe_selectivity'].values
+print(sel_true.shape)
+print(sel_pred.shape)
+r2 = r2_score(torch.tensor(sel_pred), torch.tensor(sel_true)).item()
+mse = mean_squared_error(sel_true, sel_pred)
+mae = mean_absolute_error(sel_true, sel_pred)
+
+print(f'R^2: {r2}')
+print(f'MSE: {mse}')
+print(f'MAE: {mae}')
 
 
-
+plt.figure(figsize=(8, 8))
+plt.scatter(sel_true, sel_pred, alpha=0.5, color='purple')
+plt.plot([sel_true.min(), sel_true.max()], [sel_true.min(), sel_true.max()], 'r--', lw=2)
+plt.xlabel('True Values')
+plt.ylabel('Predicted Values')
+plt.title('Parity Plot')
+plt.grid(True)
