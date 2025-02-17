@@ -146,66 +146,69 @@ def model_predict(model_dir, model_name, target_col, id_col):
     y_true = y_true.reshape(-1)
     test_rst = {id_col: ids_test,f'{target_col}': y_true, f'{target_col}_pred': y_pred}
     df_test = pd.DataFrame.from_dict(test_rst)
-    df_test.to_csv(f'./pred/{model_name}_pred.csv', index=False)
+    return df_test
+    # df_test.to_csv(f'./pred/{model_name}_pred.csv', index=False)
 
-    plt.figure(figsize=(8, 8))
-    plt.scatter(y_true, y_pred, alpha=0.5)
-    plt.plot([y_true.min(), y_true.max()], [y_true.min(), y_true.max()], 'r--', lw=2)
-    plt.xlabel('True Values')
-    plt.ylabel('Predicted Values')
-    plt.title('Parity Plot')
-    plt.grid(True)
+    # plt.figure(figsize=(8, 8))
+    # plt.scatter(y_true, y_pred, alpha=0.5)
+    # plt.plot([y_true.min(), y_true.max()], [y_true.min(), y_true.max()], 'r--', lw=2)
+    # plt.xlabel('True Values')
+    # plt.ylabel('Predicted Values')
+    # plt.title('Parity Plot')
+    # plt.grid(True)
 
 
 
 
-def derive_pred_multi_grid(df_pred):
+def derive_pred_multi_grid(df_pred, col):
 
     df_pred['mof'] = df_pred['sample'].apply(lambda x: x.split('--')[0])
     df_pred['grid_type'] = df_pred['sample'].apply(lambda x: x.split('--')[1])
     df_pred_mof = df_pred.groupby('mof').agg(
-        Xe_cm3_per_cm3_value=('Xe_cm3_per_cm3_value','first'),
-        Xe_cm3_per_cm3_value_pred_mean=('Xe_cm3_per_cm3_value_pred','first')
+        true_value=(f'{col}','first'),
+        pred_value_agg=(f'{col}_pred','median')
     ).reset_index()
 
 
-    y_pred = df_pred_mof['Xe_cm3_per_cm3_value_pred_mean'].values
-    y_true = df_pred_mof['Xe_cm3_per_cm3_value'].values
+    y_pred = df_pred_mof['pred_value_agg'].values
+    y_true = df_pred_mof['true_value'].values
     # Calculate R^2 and MSE
     r2 = r2_score(torch.tensor(y_pred), torch.tensor(y_true)).item()
     mse = mean_squared_error(y_true, y_pred)
     mae = mean_absolute_error(y_true, y_pred)
 
-    print(f'R^2: {r2}')
-    print(f'MSE: {mse}')
-    print(f'MAE: {mae}')
+    print(f'Aggreated pred R^2: {r2}')
+    print(f'Aggreated pred MSE: {mse}')
+    print(f'Aggreated pred MAE: {mae}')
 
     y_pred = y_pred.reshape(-1)
     y_true = y_true.reshape(-1)
     # test_rst = {id_col: ids_test,f'{target_col}': y_true, f'{target_col}_pred': y_pred}
     # df_test = pd.DataFrame.from_dict(test_rst)
     # df_test.to_csv(f'./pred/{model_name}_pred.csv', index=False)
+    df_pred_mof.to_csv(f'./pred/grid_data_aug_{model_name}_pred.csv', index=False)
 
     plt.figure(figsize=(8, 8))
-    plt.scatter(y_true, y_pred, alpha=0.5)
+    plt.scatter(y_true, y_pred, alpha=0.5, color='orange')
     plt.plot([y_true.min(), y_true.max()], [y_true.min(), y_true.max()], 'r--', lw=2)
     plt.xlabel('True Values')
     plt.ylabel('Predicted Values')
     plt.title('Parity Plot')
     plt.grid(True)
+    plt.savefig(f'./pred/grid_data_aug_{model_name}_pred_parity.png')
 
 # model_name = 'Mix1bar_3_grids_all_Xe_cm3_per_cm3_value_no_64_64_0.0001_0.0001_60_0.5_Adam'
 # model_name = 'Mix1bar_Xe_cm3_per_cm3_value_no_64_64_0.0001_0.0001_60_0.5_Adam'
-model_name = 'Mix1bar_Kr_cm3_per_cm3_value__no_64_64_0.0001_0.0001_60_0.5_Adam'
+model_name = 'Mix1bar_3_grids_all_Xe_cm3_per_cm3_value_no_64_64_0.0001_0.0001_60_0.5_Adam'
 
 model_dir = '/data/yll6162/mof_cnn/model'
-num_grids = 1
+num_grids = 3
 pressure = '1bar'
 # load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure}_{num_grids}_grids'
-load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure}'
-col = 'Kr_cm3_per_cm3_value'
+load_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure}_{num_grids}_grids'
+col = 'Xe_cm3_per_cm3_value'
 
-id_col = 'project'
+id_col = 'sample'
 # Define the device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -213,7 +216,7 @@ df_pred = model_predict(model_dir, model_name, col, id_col)
 
 
 if num_grids > 1:
-    derive_pred_multi_grid(df_pred)
+    derive_pred_multi_grid(df_pred, col)
 
 
 
