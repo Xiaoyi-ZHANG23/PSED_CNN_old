@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import random
 import numpy as np
 import pandas as pd
 import torch
@@ -32,6 +33,18 @@ from model_property import (
 # Reproducibility
 # -----------------------------------------------------------------
 SEED = 1
+os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
+
+def set_seed(seed):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.use_deterministic_algorithms(True, warn_only=True)
+
+set_seed(SEED)
 np.random.seed(SEED)
 torch.manual_seed(SEED)
 
@@ -40,7 +53,7 @@ torch.manual_seed(SEED)
 # -----------------------------------------------------------------
 hyper_params = {
     'batch_size':   64,
-    'num_epochs':   300,
+    'num_epochs':   1000,
     'eval_freq':    40,
     'learning_rate':1e-4,
     'weight_decay': 1e-4,
@@ -51,11 +64,13 @@ hyper_params = {
 }
 
 # Example: we want to predict Kr adsorption
-target_col  = 'Kr_cm3_per_cm3_value'
-index_col   = 'project'
-
+target_col  = 'Xe_cm3_per_cm3_value'
+index_col   = 'sample'
+pressure = '1bar'
+pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
+pressure_str = pressure_map[pressure]
 # This directory should have subfolders: train/, val/, test/, and a CSV file 'all.csv'
-load_dir    = "/projects/p32082/PSED_CNN_old/split/data_mix_1bar"  # adjust as needed
+load_dir    = "/projects/p32082/PSED_CNN_old/split/data_mix_1bar_3_grids"  # adjust as needed
 model_name  = (
     f"My3DCNN_PLD_{target_col}_"
     f"{hyper_params['batch_size']}_"
@@ -69,22 +84,29 @@ model_name  = (
 model_save_dir = "/projects/p32082/PSED_CNN_old/model"
 output_dir     = "/projects/p32082/PSED_CNN_old/output"
 os.makedirs(output_dir, exist_ok=True)
-
+num_grids = 1
+grid_type = 'all'
 # -----------------------------------------------------------------
 # Logger
 # -----------------------------------------------------------------
+timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M')
+model_name = f'Mix{pressure_str}_{num_grids}_grids_{grid_type}_{target_col}_no_64_{timestamp}'
+model_name = f"{model_name}_{hyper_params['batch_size']}_{hyper_params['learning_rate']}_{hyper_params['weight_decay']}_{hyper_params['step_size']}_{hyper_params['gamma']}_{hyper_params['optimizer']}"
 def setup_logger(log_dir="./log", log_filename=None):
     os.makedirs(log_dir, exist_ok=True)
     if log_filename is None:
-        from datetime import datetime
-        log_filename = f"{model_name}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.log"
+        log_filename = f"{model_name}_{timestamp}.log"
     log_file = os.path.join(log_dir, log_filename)
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
-        handlers=[logging.FileHandler(log_file), logging.StreamHandler()]
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ]
     )
-    return logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+    return logger
 
 logger = setup_logger()
 logger.info(f"Hyperparameters: {hyper_params}")
@@ -124,7 +146,7 @@ def get_pld_list(dir_path):
     with open(json_path, 'r') as f:
         info = json.load(f)
     names = info['name']  # list of MOF names
-    return df_all.loc[names, "PLD"].values.astype(np.float32)
+    return df_all.loc[names, "LCD"].values.astype(np.float32)
 
 pld_train = get_pld_list(train_dir)
 pld_val   = get_pld_list(val_dir)
@@ -286,7 +308,7 @@ logger.info(f"Test MAE:  {mae:.6f}")
 # 12) Save Model
 # -----------------------------------------------------------------
 os.makedirs(model_save_dir, exist_ok=True)
-model_save_path = os.path.join(model_save_dir, f"{model_name}_property_state_dict.pt")
+model_save_path = os.path.join(model_save_dir, f"{model_name}__LCD_3split_84_property_state_dict.pt")
 
 torch.save(
     {
@@ -302,7 +324,7 @@ logger.info(f"Model and optimizer state dict saved to {model_save_path}")
 # -----------------------------------------------------------------
 # 13) Save Predictions (CSV)
 # -----------------------------------------------------------------
-predictions_save_path = os.path.join(output_dir, f"predictions_{model_name}.csv")
+predictions_save_path = os.path.join(output_dir, f"predictions_{model_name}_LCD_3split_84.csv")
 df_predictions = pd.DataFrame({
     "true_value": y_true,
     "predicted_value": y_pred
@@ -321,7 +343,6 @@ plt.ylabel("Predicted Values")
 plt.title("Parity Plot")
 plt.grid(True)
 
-parity_plot_path = os.path.join(output_dir, f"parity_{model_name}_PLD.png")
-plt.savefig(parity_plot_path)
+plt.savefig(os.path.join(output_dir, f'parity_{model_name}_{timestamp}_LCD_3split_84.png'))
 logger.info(f"Saved parity plot to {parity_plot_path}")
 plt.close()
