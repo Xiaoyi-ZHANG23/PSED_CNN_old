@@ -59,14 +59,14 @@ class RetNet(nn.Module):
             nn.Linear(120000, 1176),
             nn.BatchNorm1d(num_features=1176),
             nn.LeakyReLU(),
+            nn.Linear(1176, 84),
+            nn.BatchNorm1d(num_features=84),
+            nn.LeakyReLU(),
         )
 
         # Final layers: add pld_dim to input dimension
         self.fc2 = nn.Sequential(
-            nn.Linear(1176 + pld_dim, 84),
-            nn.BatchNorm1d(num_features=84),
-            nn.LeakyReLU(),
-            nn.Linear(84, 20),
+            nn.Linear(84+ pld_dim, 20),
             nn.BatchNorm1d(num_features=20),
             nn.LeakyReLU(),
             nn.Linear(20, 1),
@@ -251,15 +251,29 @@ def init_weights(m, initialization='normal', **kwargs):
 
 
 def load_data(dir_batch, path_to_csv, target_name, index_col, size=None):
-    with open(f'{dir_batch}/clean.json', 'r') as fhand:
+    with open(f'{dir_batch}/clean_modified.json', 'r') as fhand:
         names = json.load(fhand)['name']
     print(dir_batch, len(names))
     df = pd.read_csv(path_to_csv, index_col=index_col)
 
     y = df.loc[names, target_name].values
-    X = np.load(f'{dir_batch}/clean.npy', mmap_mode='r')
+    X = np.load(f'{dir_batch}/clean_modified.npy', mmap_mode='r')
 
     if size is None:
         return X, y
     else:
         return X[:size], y[:size]
+    
+def load_data_id(dir_batch, path_to_csv, target_name, index_col, size=None):
+    with open(f'{dir_batch}/clean_modified.json', 'r') as fhand:
+        names = json.load(fhand)['name']
+    print(dir_batch, len(names))
+    df = pd.read_csv(path_to_csv, index_col=index_col)
+
+    y = df.loc[names, target_name].values
+    X = np.load(f'{dir_batch}/clean_modified.npy', mmap_mode='r')
+    ids = names
+    if size is None:
+        return X, y, ids
+    else:
+        return X[:size], y[:size], ids[:size]

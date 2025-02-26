@@ -64,15 +64,16 @@ hyper_params = {
 }
 
 # Example: we want to predict Kr adsorption
-target_col  = 'Xe_cm3_per_cm3_value'
+target_col  = 'Kr_cm3_per_cm3_value'
 index_col   = 'sample'
-pressure = '1bar'
+pressure = '1bar_0.25bar'
 pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
-pressure_str = pressure_map[pressure]
+pressure_str = 'all_pressures'
 # This directory should have subfolders: train/, val/, test/, and a CSV file 'all.csv'
-load_dir    = "/projects/p32082/PSED_CNN_old/split/data_mix_1bar_3_grids"  # adjust as needed
+load_dir    = "/projects/p32082/PSED_CNN_old/split/data_mix_2pressure_3_grids"  # adjust as needed
+csv_path  = "/projects/p32082/PSED_CNN_old/split/data_mix_2pressure_3_grids/all_combined.csv"
 model_name  = (
-    f"My3DCNN_PLD_{target_col}_"
+    f"My3DCNN_Pressure_{target_col}_"
     f"{hyper_params['batch_size']}_"
     f"{hyper_params['learning_rate']}_"
     f"{hyper_params['weight_decay']}_"
@@ -124,7 +125,7 @@ logger.info(f"Using device: {device}")
 train_dir = os.path.join(load_dir, "train")
 val_dir   = os.path.join(load_dir, "val")
 test_dir  = os.path.join(load_dir, "test")
-csv_path  = os.path.join(load_dir, "all.csv")
+
 
 X_train, y_train = load_data(train_dir, csv_path, target_col, index_col)
 X_val,   y_val   = load_data(val_dir,   csv_path, target_col, index_col)
@@ -142,11 +143,11 @@ df_all = pd.read_csv(csv_path, index_col=index_col)
 
 def get_pld_list(dir_path):
     """Reads clean.json in dir_path, returns a float array of PLD from df_all."""
-    json_path = os.path.join(dir_path, "clean.json")
+    json_path = os.path.join(dir_path, "clean_modified.json")
     with open(json_path, 'r') as f:
         info = json.load(f)
     names = info['name']  # list of MOF names
-    return df_all.loc[names, "LCD"].values.astype(np.float32)
+    return df_all.loc[names, "pressure"].values.astype(np.float32)
 
 pld_train = get_pld_list(train_dir)
 pld_val   = get_pld_list(val_dir)
@@ -308,7 +309,7 @@ logger.info(f"Test MAE:  {mae:.6f}")
 # 12) Save Model
 # -----------------------------------------------------------------
 os.makedirs(model_save_dir, exist_ok=True)
-model_save_path = os.path.join(model_save_dir, f"{model_name}__LCD_3split_84_property_state_dict.pt")
+model_save_path = os.path.join(model_save_dir, f"{model_name}__2_pressure_3split_84_property_state_dict.pt")
 
 torch.save(
     {
@@ -324,7 +325,7 @@ logger.info(f"Model and optimizer state dict saved to {model_save_path}")
 # -----------------------------------------------------------------
 # 13) Save Predictions (CSV)
 # -----------------------------------------------------------------
-predictions_save_path = os.path.join(output_dir, f"predictions_{model_name}_LCD_3split_84.csv")
+predictions_save_path = os.path.join(output_dir, f"predictions_{model_name}_2_pressure_3split_84.csv")
 df_predictions = pd.DataFrame({
     "true_value": y_true,
     "predicted_value": y_pred
@@ -342,7 +343,7 @@ plt.xlabel("True Values")
 plt.ylabel("Predicted Values")
 plt.title("Parity Plot")
 plt.grid(True)
-
-plt.savefig(os.path.join(output_dir, f'parity_{model_name}_{timestamp}_LCD_3split_84.png'))
+parity_plot_path = os.path.join(output_dir, f'parity__2P_{model_name}_{timestamp}_2_pressure_3split_84.png')
+plt.savefig(parity_plot_path)
 logger.info(f"Saved parity plot to {parity_plot_path}")
 plt.close()
