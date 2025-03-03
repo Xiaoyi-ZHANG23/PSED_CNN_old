@@ -70,13 +70,15 @@ hyper_params = {
 }
 
 # Example: we want to predict Xe adsorption
-target_col  = 'Xe_cm3_per_cm3_value'
+# target_col  = 'Xe_cm3_per_cm3_value'
+target_col  = 'Kr_cm3_per_cm3_value'
 index_col   = 'sample'
-pressure = '1bar'
+pressure = '0.1bar'
 pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
 pressure_str = pressure_map[pressure]
 # Directory structure
-load_dir    = "/data/yll6162/mof_cnn/data_mix_1bar_3_grids"  # adjust as needed
+csv_dir = f"/data/yll6162/mof_cnn/data_mix_{pressure_str}_3_grids"  # direcotry for target value and extra features
+grid_dir = "/data/yll6162/mof_cnn/data_mix_1bar_3_grids" # directory for grid data and data splits, which is not necessary the same as csv_dir
 model_name  = (
     f"My3DCNN_extras_{target_col}_"
     f"{hyper_params['batch_size']}_"
@@ -125,10 +127,10 @@ logger.info(f"Using device: {device}")
 # -----------------------------------------------------------------
 # 1) Load train, val, test data (X, y) from load_dir
 # -----------------------------------------------------------------
-train_dir = os.path.join(load_dir, "train")
-val_dir   = os.path.join(load_dir, "val")
-test_dir  = os.path.join(load_dir, "test")
-csv_path  = os.path.join(load_dir, f"all_{num_grids}grids.csv")
+train_dir = os.path.join(grid_dir, "train")
+val_dir   = os.path.join(grid_dir, "val")
+test_dir  = os.path.join(grid_dir, "test")
+csv_path  = os.path.join(csv_dir, f"all_{num_grids}grids.csv")
 
 X_train, y_train = load_data(train_dir, csv_path, target_col, index_col)
 X_val,   y_val   = load_data(val_dir,   csv_path, target_col, index_col)
