@@ -17,21 +17,22 @@ grid_types = ['center', 'rotated', 'translated']
 SEED = 42
 
 # If you had a reference split path, set it here; otherwise None
-ref_data_split = None
+ref_data_split = 'sample_split_3/'
 
 target_col1 = 'Xe_cm3_per_cm3_value'
 target_col2 = 'Kr_cm3_per_cm3_value'
 
 # Decide your output directory
 if len(grid_types) > 1:
-    output_dir = f'/projects/p32082/PSED_CNN_old/split/data_mix_{pressure_str}_{len(grid_types)}_grids'
+    output_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}_{len(grid_types)}_grids'
 else:
-    output_dir = f'/projects/p32082/PSED_CNN_old/split/data_mix_{pressure_str}_{grid_types[0]}'.rstrip('_')
+    output_dir = f'/data/yll6162/mof_cnn/data_mix_{pressure_str}_{grid_types[0]}'.rstrip('_')
 
 # Your input Excel file
-input_csv = '/projects/p32082/PSED_CNN_old/data/cleaned_data.xlsx'
+input_csv = 'cleaned_data.xlsx'
 os.makedirs(output_dir, exist_ok=True)
-
+property_csv = 'sample_split_single/1bar_all.csv'
+property_cols = ["PLD", "LCD"]
 # Read the isotherm data from the relevant sheet
 df_iso = pd.read_excel(input_csv, sheet_name=pressure)
 df_iso['database'] = df_iso['project'].apply(lambda x: 'qmof' if x.startswith('qmof') else 'ToBaCCo')
@@ -45,55 +46,63 @@ df_iso.loc[(df_iso['Xe_cm3_per_cm3_value'] == 0) & (df_iso['Kr_cm3_per_cm3_value
            'Xe_selectivity'] = 0
 
 # The top-level directory containing MOF subfolders
-base_dir = "/projects/p32082/PSED_CNN_old/data/New_Parsed"
+base_dir = "/data/yll6162/mof_cnn/PSED_data/New_Parsed_new_new/New_Parsed/"
 subdir = "ASCI_Grids"
 
-# 1) For each grid_type, check which MOFs have valid grid files
-for grid_type in grid_types:
-    df_iso[grid_type] = False  # add a boolean column, default False
-    grid_type_str = grid_type if grid_type != 'center' else ''
-    energy_file = f"{grid_type_str}_energy_grid.txt".lstrip('_')
+df_property = pd.read_csv(property_csv)
+df_iso = df_iso.merge(df_property[["project"] + property_cols], on='project', how='left')
 
-    abnormal_files = []
-    empty_files = []
-    absent_files = []
-    normal_files = []
+if ref_data_split and os.path.exists(ref_data_split):
+    df_iso_all3 = df_iso.copy()
+    for grid_type in grid_types:
+        df_iso_all3[grid_type] = True 
+else:
+    # 1) For each grid_type, check which MOFs have valid grid files
+    for grid_type in grid_types:
+        df_iso[grid_type] = False  # add a boolean column, default False
+        grid_type_str = grid_type if grid_type != 'center' else ''
+        energy_file = f"{grid_type_str}_energy_grid.txt".lstrip('_')
 
-    # Loop over each MOF folder in base_dir
-    for folder in os.listdir(base_dir):
-        folder_path = os.path.join(base_dir, folder)
-        if os.path.isdir(folder_path):
-            asci_grids_path = os.path.join(folder_path, subdir)
-            if os.path.exists(asci_grids_path):
-                file_path = os.path.join(asci_grids_path, energy_file)
-                if os.path.exists(file_path):
-                    try:
-                        with open(file_path, 'r') as f:
-                            lines = f.readlines()
-                            if len(lines) != 68921:
-                                if len(lines) == 0:
-                                    empty_files.append(folder)
-                                abnormal_files.append(folder)
-                            else:
-                                normal_files.append(folder)
-                                # Mark this MOF as True for this grid_type
-                                df_iso.loc[df_iso['project'] == folder, grid_type] = True
-                    except Exception as e:
-                        print(f"Error reading {energy_file} in folder {folder}: {e}")
+        abnormal_files = []
+        empty_files = []
+        absent_files = []
+        normal_files = []
+
+        # Loop over each MOF folder in base_dir
+        for folder in os.listdir(base_dir):
+            folder_path = os.path.join(base_dir, folder)
+            if os.path.isdir(folder_path):
+                asci_grids_path = os.path.join(folder_path, subdir)
+                if os.path.exists(asci_grids_path):
+                    file_path = os.path.join(asci_grids_path, energy_file)
+                    if os.path.exists(file_path):
+                        try:
+                            with open(file_path, 'r') as f:
+                                lines = f.readlines()
+                                if len(lines) != 68921:
+                                    if len(lines) == 0:
+                                        empty_files.append(folder)
+                                    abnormal_files.append(folder)
+                                else:
+                                    normal_files.append(folder)
+                                    # Mark this MOF as True for this grid_type
+                                    df_iso.loc[df_iso['project'] == folder, grid_type] = True
+                        except Exception as e:
+                            print(f"Error reading {energy_file} in folder {folder}: {e}")
+                    else:
+                        absent_files.append(folder)
+                        print(f"{energy_file} does not exist in folder: {folder}")
                 else:
-                    absent_files.append(folder)
-                    print(f"{energy_file} does not exist in folder: {folder}")
-            else:
-                print(f"ASCI_Grids subdirectory does not exist in folder: {folder}")
+                    print(f"ASCI_Grids subdirectory does not exist in folder: {folder}")
 
-    print(f"\n=== Summary for {grid_type} ===")
-    print(f"Absent {grid_type} energy_grid.txt files: {len(absent_files)}")
-    print(f"Empty {grid_type} energy_grid.txt files: {len(empty_files)}")
-    print(f"Abnormal {grid_type} energy_grid.txt files: {len(abnormal_files)}")
-    print(f"Normal {grid_type} energy_grid.txt files: {len(normal_files)}")
+        print(f"\n=== Summary for {grid_type} ===")
+        print(f"Absent {grid_type} energy_grid.txt files: {len(absent_files)}")
+        print(f"Empty {grid_type} energy_grid.txt files: {len(empty_files)}")
+        print(f"Abnormal {grid_type} energy_grid.txt files: {len(abnormal_files)}")
+        print(f"Normal {grid_type} energy_grid.txt files: {len(normal_files)}")
 
-# 2) Filter to MOFs that have *all three* grids = True
-df_iso_all3 = df_iso[df_iso['center'] & df_iso['rotated'] & df_iso['translated']]
+    # 2) Filter to MOFs that have *all three* grids = True
+    df_iso_all3 = df_iso[df_iso['center'] & df_iso['rotated'] & df_iso['translated']]
 
 # We'll do the "melt" only on df_iso_all3
 old_cols = df_iso_all3.columns.tolist()
@@ -114,8 +123,8 @@ df_filtered['sample'] = df_filtered['project'] + "--" + df_filtered['grid_type']
 df_iso_final = df_filtered.drop(columns=['has_grid'])
 
 # 4) Save to CSV (renamed to "all_3grids.csv" to reflect the filtering)
-df_iso_final.to_csv(f'{output_dir}/all_3grids.csv', index=False)
-print(f"Filtered to MOFs with all 3 grids. Final shape: {df_iso_final.shape}")
+df_iso_final.to_csv(f'{output_dir}/all_{len(grid_types)}grids.csv', index=False)
+print(f"Filtered to MOFs with all {len(grid_types)} grids. Final shape: {df_iso_final.shape}")
 
 # 5) Prepare for Splitting
 # filterd_mofs are now each row's "project". Note that multiple rows
@@ -123,16 +132,27 @@ print(f"Filtered to MOFs with all 3 grids. Final shape: {df_iso_final.shape}")
 
 filterd_mofs = df_iso_final['project'].tolist()
 
-if ref_data_split and os.path.exists(ref_data_split):
-    print(f"Using reference dataset split from {ref_data_split}")
-    datset_mof = {}
-    for split in ['train', 'test', 'val']:
-        with open(f'{ref_data_split}/{split}/clean.json', 'r') as f:
-            ref_data = json.load(f)
-        subset_files = [sample for sample in ref_data['name'] if sample in filterd_mofs]
-        datset_mof[split] = subset_files
-        print(f"Loaded {split} files: {len(subset_files)} from original reference dataset split {len(ref_data['name'])}")
 
+grid = 41
+pos_cap = 0
+subset_data = {}
+if ref_data_split and os.path.exists(ref_data_split):
+    total_size = 0
+    samples = []
+    for subset in ['train', 'test', 'val']:
+        dir_path = os.path.join(ref_data_split, subset)
+        with open(f'{dir_path}/clean.json', 'r') as f:
+            subset_data[subset] = json.load(f)
+            total_size += subset_data[subset]['size']
+            samples.extend(subset_data[subset]['name'])
+        # Write JSON
+        dir_path = os.path.join(output_dir, subset)
+        with open(f'{dir_path}/clean.json', 'w') as f:
+            json.dump(subset_data[subset], f)
+        print(f"{subset}: {subset_data[subset]['size']} samples")
+        print(f"saved {subset} data to {dir_path}/clean.json")
+    df_iso_final = df_iso_final[df_iso_final['sample'].isin(samples)]
+    assert total_size == df_iso_final.shape[0]
 else:
     print("\nNo reference dataset split found. Splitting data randomly.")
     test_size = 0.1
@@ -152,42 +172,33 @@ else:
 
     datset_mof = {'train': train_mofs, 'test': test_mofs, 'val': val_mofs}
 
+    # 6) Build the JSON splits and the .npy arrays
+    # You have multiple grid types, so the "else" block from your code
+    # (handling multiple grid types) is relevant.
 
-grid = 41
-pos_cap = 0
+    for subset in ['train', 'test', 'val']:
+        subset_data[subset] = {}
+        dir_path = os.path.join(output_dir, subset)
 
-# 6) Build the JSON splits and the .npy arrays
-# You have multiple grid types, so the "else" block from your code
-# (handling multiple grid types) is relevant.
-subset_data = {}
-for subset in ['train', 'test', 'val']:
-    subset_data[subset] = {}
-    dir_path = os.path.join(output_dir, subset)
+        # # Optionally remove if you want a fresh directory:
+        # if os.path.exists(dir_path):
+        #     shutil.rmtree(dir_path)
 
-    # Optionally remove if you want a fresh directory:
-    if os.path.exists(dir_path):
-        shutil.rmtree(dir_path)
+        os.makedirs(dir_path, exist_ok=True)
+        subset_data[subset]['name'] = []
 
-    os.makedirs(dir_path, exist_ok=True)
-    subset_data[subset]['name'] = []
+        # For each MOF in that split, gather the 3 grid types from df_iso_final
+        for mof in datset_mof[subset]:
+            # For each grid type, check if it's in df_iso_final
+            for gtype in grid_types:
+                # (MOF, gtype) must exist in df_iso_final
+                if ((df_iso_final['project'] == mof) & (df_iso_final['grid_type'] == gtype)).any():
+                    subset_data[subset]['name'].append(f"{mof}--{gtype}")
 
-    # For each MOF in that split, gather the 3 grid types from df_iso_final
-    for mof in datset_mof[subset]:
-        # For each grid type, check if it's in df_iso_final
-        for gtype in grid_types:
-            # (MOF, gtype) must exist in df_iso_final
-            if ((df_iso_final['project'] == mof) & (df_iso_final['grid_type'] == gtype)).any():
-                subset_data[subset]['name'].append(f"{mof}--{gtype}")
+        subset_data[subset]['grid'] = grid
+        subset_data[subset]['size'] = len(subset_data[subset]['name'])
 
-    subset_data[subset]['grid'] = grid
-    subset_data[subset]['size'] = len(subset_data[subset]['name'])
 
-    # Write JSON
-    with open(f'{dir_path}/clean.json', 'w') as f:
-        json.dump(subset_data[subset], f)
-
-    print(f"{subset}: {subset_data[subset]['size']} samples")
-    print(f"saved {subset} data to {dir_path}/clean.json")
 
 # 7) Create the clean.npy for each subset
 for subset in ['train', 'test', 'val']:
