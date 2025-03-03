@@ -9,11 +9,16 @@ import torch.optim as optim
 import torch.nn as nn
 import matplotlib.pyplot as plt
 from torchvision import transforms
-from torch.utils.data import DataLoader
+
 from datetime import datetime
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from torcheval.metrics.functional import r2_score
+
+import torch.distributed as dist
+import torch.multiprocessing as mp
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.data import DataLoader, DistributedSampler
 
 # -----------------------------------------------------------------
 # Import from model_property.py
@@ -65,13 +70,15 @@ hyper_params = {
 }
 
 # Example: we want to predict Xe adsorption
-target_col  = 'Xe_cm3_per_cm3_value'
+# target_col  = 'Xe_cm3_per_cm3_value'
+target_col  = 'Kr_cm3_per_cm3_value'
 index_col   = 'sample'
-pressure = '1bar'
+pressure = '0.1bar'
 pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
 pressure_str = pressure_map[pressure]
 # Directory structure
-load_dir    = "/projects/p32082/PSED_CNN_old/split/data_mix_1bar_3_grids"  # adjust as needed
+csv_dir = f"/data/yll6162/mof_cnn/data_mix_{pressure_str}_3_grids"  # direcotry for target value and extra features
+grid_dir = "/data/yll6162/mof_cnn/data_mix_1bar_3_grids" # directory for grid data and data splits, which is not necessary the same as csv_dir
 model_name  = (
     f"My3DCNN_extras_{target_col}_"
     f"{hyper_params['batch_size']}_"
@@ -82,12 +89,12 @@ model_name  = (
     f"{hyper_params['optimizer']}"
 )
 
-model_save_dir = "/projects/p32082/PSED_CNN_old/model"
-output_dir     = "/projects/p32082/PSED_CNN_old/output"
+model_save_dir = "/data/yll6162/mof_cnn/model"
+output_dir     = "pred"
 os.makedirs(output_dir, exist_ok=True)
-num_grids = 1
+num_grids = 3
 grid_type = 'all'
-
+property_cols = ["PLD", "LCD"]
 timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M')
 model_name = f'Mix{pressure_str}_{num_grids}_grids_{grid_type}_{target_col}_no_64_{timestamp}'
 model_name = f"{model_name}_{hyper_params['batch_size']}_{hyper_params['learning_rate']}_{hyper_params['weight_decay']}_{hyper_params['step_size']}_{hyper_params['gamma']}_{hyper_params['optimizer']}"
@@ -120,10 +127,10 @@ logger.info(f"Using device: {device}")
 # -----------------------------------------------------------------
 # 1) Load train, val, test data (X, y) from load_dir
 # -----------------------------------------------------------------
-train_dir = os.path.join(load_dir, "train")
-val_dir   = os.path.join(load_dir, "val")
-test_dir  = os.path.join(load_dir, "test")
-csv_path  = os.path.join(load_dir, "all.csv")
+train_dir = os.path.join(grid_dir, "train")
+val_dir   = os.path.join(grid_dir, "val")
+test_dir  = os.path.join(grid_dir, "test")
+csv_path  = os.path.join(csv_dir, f"all_{num_grids}grids.csv")
 
 X_train, y_train = load_data(train_dir, csv_path, target_col, index_col)
 X_val,   y_val   = load_data(val_dir,   csv_path, target_col, index_col)
@@ -151,7 +158,7 @@ def get_extras_list(dir_path):
 
     # Example: read 3 columns from df_all
     # Adjust column names to match your CSV
-    return df_all.loc[names, ["PLD", "LCD", "density_g_cm3"]].values.astype(np.float32)
+    return df_all.loc[names, ["PLD", "LCD"]].values.astype(np.float32)
 
 extras_train = get_extras_list(train_dir)  # shape (N_train, 3)
 extras_val   = get_extras_list(val_dir)    # shape (N_val, 3)
@@ -229,7 +236,7 @@ test_loader = DataLoader(
 # -----------------------------------------------------------------
 # 6) Instantiate RetNet with extra_dim=3
 # -----------------------------------------------------------------
-net = RetNet(extra_dim=3).to(device)
+net = RetNet(extra_dim=len(property_cols)).to(device)
 criterion = nn.L1Loss().to(device)
 
 optimizer = optim.Adam(
@@ -248,7 +255,7 @@ scheduler = optim.lr_scheduler.StepLR(
 # -----------------------------------------------------------------
 # 7) Weight Initialization
 # -----------------------------------------------------------------
-from model_property import init_weights
+# from model_property import init_weights
 net.apply(lambda m: init_weights(m, a=0.01))
 
 # Optionally initialize final bias
@@ -259,7 +266,7 @@ logger.info(f"Initialized final bias to: {y_train.mean():.4f}")
 # -----------------------------------------------------------------
 # 8) Wrap in LearningMethod & Train
 # -----------------------------------------------------------------
-from model_property import LearningMethod
+# from model_property import LearningMethod
 model = LearningMethod(
     network=net,
     optimizer=optimizer,
