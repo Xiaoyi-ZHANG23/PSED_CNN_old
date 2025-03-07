@@ -132,6 +132,7 @@ if ref_data_split and os.path.exists(ref_data_split):
             datset_mof[split] = subset_files
             print(f"Loaded {split} files: {len(subset_files)} from original reference dataset split {len(ref_data['name'])}")
 else:
+    # generating samples from scratch is not working, use preprocess_local.py instead
     print("No reference dataset split found. Splitting data randomly.")
     test_size = 0.1
     val_size = 0.1

@@ -70,11 +70,11 @@ hyper_params = {
 }
 
 # Example: we want to predict Xe adsorption
-# target_col  = 'Xe_cm3_per_cm3_value'
 target_col  = 'Kr_cm3_per_cm3_value'
+# target_col  = 'Xe_cm3_per_cm3_value'
 index_col   = 'sample'
-pressure = '0.1bar'
-pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
+pressure = '10bar'
+pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '5bar': '5bar', '10bar': '10bar', '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
 pressure_str = pressure_map[pressure]
 # Directory structure
 csv_dir = f"/data/yll6162/mof_cnn/data_mix_{pressure_str}_3_grids"  # direcotry for target value and extra features

@@ -7,13 +7,13 @@ import os
 import json
 import shutil  # <-- needed if you want to remove directories
 
-pressure = '0.1bar'
-pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '10bar': '10bar', 
+pressure = '10bar'
+pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '5bar': '5bar', '10bar': '10bar', 
                 '0.25bar': '0p25bar', '0.5bar': '0p5bar'}
 pressure_str = pressure_map[pressure]
 
 # Choose your three grid types
-grid_types = ['center', 'rotated', 'translated']
+grid_types = ['center']
 SEED = 42
 
 # If you had a reference split path, set it here; otherwise None
