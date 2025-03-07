@@ -13,7 +13,7 @@ pressure_map = {'0.1bar': '0p1bar', '1bar': '1bar', '5bar': '5bar', '10bar': '10
 pressure_str = pressure_map[pressure]
 
 # Choose your three grid types
-grid_types = ['center', 'rotated', 'translated']
+grid_types = ['center']
 SEED = 42
 
 # If you had a reference split path, set it here; otherwise None
